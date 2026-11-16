@@ -103,6 +103,17 @@
     @keyframes pulse-cta { 0%,100% { transform:scale(1); box-shadow:0 12px 28px rgba(22,163,74,.28); } 50% { transform:scale(1.025); box-shadow:0 16px 36px rgba(22,163,74,.45); } }
     .microcopy { margin:12px 0 0; color:var(--muted); font-size:13px; }
 
+    /* ===== Pop-up aos 7min30 de vídeo ===== */
+    .vsl-popup { position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(17,24,39,.55); animation:popup-fade .3s ease both; }
+    .vsl-popup[hidden] { display:none; }
+    .vsl-popup-card { position:relative; width:100%; max-width:420px; padding:32px 26px 26px; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(17,24,39,.35); text-align:center; animation:popup-pop .35s ease both; }
+    .vsl-popup-card p { margin:0 0 20px; color:var(--navy); font:700 clamp(1.1rem,4.5vw,1.3rem)/1.4 Inter,sans-serif; }
+    .vsl-popup-btn { display:inline-block; padding:12px 28px; border:0; border-radius:10px; background:#16a34a; color:#fff; font:800 15px Inter,sans-serif; cursor:pointer; }
+    .vsl-popup-btn:hover { background:#15803d; }
+    .vsl-popup-btn:focus-visible { outline:3px solid #16a34a; outline-offset:3px; }
+    @keyframes popup-fade { from { opacity:0; } to { opacity:1; } }
+    @keyframes popup-pop { from { opacity:0; transform:translateY(14px) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+
     /* ===== Selo e rodapé (sempre visíveis) ===== */
     .guarantee-seal { display:block; width:min(100%,260px); height:auto; margin:24px auto 0; }
     .footer { padding:20px 0 24px; text-align:center; color:#555; font-size:13px; }
@@ -172,6 +183,14 @@
     </button>
     <input class="volume-slider" id="volume-slider" type="range" min="0" max="100" value="100" aria-label="Volume">
     <span class="volume-label" id="volume-label">100%</span>
+  </div>
+
+  <!-- Pop-up exibido aos 7min30 de vídeo -->
+  <div class="vsl-popup" id="vsl-popup" role="dialog" aria-modal="true" aria-labelledby="vsl-popup-texto" hidden>
+    <div class="vsl-popup-card">
+      <p id="vsl-popup-texto">Ainda está aí, temos 3 bônus exclusivos para você, aguarde e confira</p>
+      <button class="vsl-popup-btn" id="vsl-popup-close" type="button">Sim estou aqui</button>
+    </div>
   </div>
 
   <!-- Todo o conteúdo abaixo só aparece depois de 15 minutos de vídeo assistido -->
@@ -266,6 +285,19 @@
       if (!revealed && video.currentTime >= REVEAL_AT_SECONDS) revealContent(true);
     });
 
+    // ----- Pop-up "Ainda está aí": aos 7min30 (450 s) de vídeo, ou quando o lead abaixa o volume. Não pausa o vídeo -----
+    const POPUP_AT_SECONDS = 7 * 60 + 30;
+    const popup = document.getElementById('vsl-popup');
+    let popupShownByTime = false;
+    function showPopup() { popup.hidden = false; }
+    video.addEventListener('timeupdate', () => {
+      if (!popupShownByTime && video.currentTime >= POPUP_AT_SECONDS) {
+        popupShownByTime = true;
+        showPopup();
+      }
+    });
+    document.getElementById('vsl-popup-close').addEventListener('click', () => { popup.hidden = true; });
+
     // ----- Prova social (só roda depois de liberada) -----
     const buyerName = document.getElementById('buyer-name');
     const buyers = ['Mariana S.', 'Patrícia R.', 'Juliana M.', 'Carla A.'];
@@ -301,20 +333,24 @@
     }
     volumeSlider.addEventListener('input', () => {
       const level = Number(volumeSlider.value);
+      const previousLevel = video.muted ? 0 : Math.round(video.volume * 100);
       video.muted = level === 0;
       video.volume = level / 100;
       if (level > 0) lastVolume = level;
       renderVolume();
+      if (level < previousLevel) showPopup(); // lead abaixou o volume
     });
     volumeBtn.addEventListener('click', () => {
       if (video.muted || video.volume === 0) {
         video.muted = false;
         video.volume = (lastVolume || 100) / 100;
+        renderVolume();
       } else {
         lastVolume = Math.round(video.volume * 100);
         video.muted = true;
+        renderVolume();
+        showPopup(); // lead silenciou o vídeo
       }
-      renderVolume();
     });
     video.addEventListener('volumechange', renderVolume);
 
