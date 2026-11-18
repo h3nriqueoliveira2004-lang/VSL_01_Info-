@@ -211,7 +211,7 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
   </div>
 
   <!-- Todo o conteúdo abaixo só aparece depois de 15 minutos de vídeo assistido -->
-  <div id="after-video" hidden>
+  <div id="after-video">
     <div class="social-proof-toast" aria-live="polite">
       <span class="social-proof-dot" aria-hidden="true"></span>
       <div><strong id="buyer-name">Mariana S.</strong><span>Comprou</span></div>
@@ -273,14 +273,9 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
   <footer class="footer"><p>Suas informações estão 100% seguras e nunca serão compartilhadas com ninguém.</p><p>© 2025 | <a href="#">Informações legais</a></p></footer>
 
   <script>
-    // Tempo de vídeo (em segundos) que o lead precisa assistir para liberar a oferta.
-    const REVEAL_AT_SECONDS = 15 * 60;
-
     const video = document.getElementById('vsl-video');
     const playButton = document.getElementById('play-button');
-    const afterVideo = document.getElementById('after-video');
     let started = false;
-    let revealed = false;
 
     function toggleFaq(button) {
       const answer = button.nextElementSibling;
@@ -289,18 +284,6 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
       button.setAttribute('aria-expanded', String(!isOpen));
       button.querySelector('span').textContent = isOpen ? '+' : '−';
     }
-
-    // ----- Libera o conteúdo escrito aos 15 minutos de vídeo -----
-    function revealContent(animate) {
-      if (revealed) return;
-      revealed = true;
-      afterVideo.hidden = false;
-      if (animate) afterVideo.classList.add('reveal');
-    }
-
-    video.addEventListener('timeupdate', () => {
-      if (!revealed && video.currentTime >= REVEAL_AT_SECONDS) revealContent(true);
-    });
 
     // ----- Pop-up "Ainda está aí": aos 7min30 (450 s) de vídeo, ou quando o lead abaixa o volume. Não pausa o vídeo -----
     const POPUP_AT_SECONDS = 7 * 60 + 30;
