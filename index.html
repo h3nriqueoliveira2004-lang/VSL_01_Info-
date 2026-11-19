@@ -40,6 +40,22 @@
     @keyframes pulse-cta { 0%,100% { transform:scale(1); } 50% { transform:scale(1.025); } }
     .guarantee-seal { display:block; width:min(100%,200px); height:auto; margin:22px auto 0; }
 
+    /* ===== Comentários ===== */
+    .comments { width:100%; max-width:640px; margin:34px auto 0; }
+    .comments h2 { margin:0 0 18px; color:#1d3557; text-align:center; font:800 clamp(1.3rem,4.5vw,1.7rem)/1.25 Inter,sans-serif; }
+    .comment-list { border:1px solid #dfe4ea; border-radius:16px; padding:10px 14px 6px; }
+    .comment { display:flex; gap:12px; align-items:flex-start; padding:12px 0; }
+    .comment + .comment { border-top:1px solid #edf0f3; }
+    .avatar { width:44px; height:44px; flex:0 0 44px; border-radius:50%; overflow:hidden; background:#e5e7eb; }
+    .avatar img { width:100%; height:100%; display:block; object-fit:cover; }
+    .comment-content { min-width:0; flex:1; }
+    .bubble { background:#f0f2f5; border-radius:4px 14px 14px 14px; padding:9px 12px 10px; }
+    .comment strong { display:block; color:#174ea6; font:700 14px Inter,sans-serif; }
+    .comment p { margin:5px 0 0; font-size:15px; line-height:1.4; }
+    .comment-meta { display:flex; flex-wrap:wrap; gap:14px; padding:4px 10px 0; color:var(--muted); font-size:12px; }
+    .reactions { margin-left:auto; color:#556; }
+    @media (max-width:380px) { .comment-meta { gap:8px; font-size:11px; } .reactions { display:none; } .comment p { font-size:14px; } }
+
     /* ===== Rodapé ===== */
     .footer { width:100%; max-width:640px; margin-top:32px; padding:18px 0 28px; border-top:1px solid #e5e7eb; text-align:center; color:var(--muted); font-size:12.5px; line-height:1.5; }
     .footer p { margin:6px 0; }
@@ -91,6 +107,21 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
   <section class="offer" id="oferta" aria-label="Oferta">
     <a href="oferta/" class="cta-btn" id="cta-oferta">GARANTA AGORA MESMO</a>
     <img class="guarantee-seal" src="images/selo-garantia.jpg" alt="Selo de garantia de 7 dias com devolução de 100% do dinheiro">
+  </section>
+
+  <section class="comments" id="comentarios" aria-labelledby="comentarios-titulo">
+    <h2 id="comentarios-titulo">O que as pessoas estão dizendo</h2>
+    <div class="comment-list">
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-1.webp" alt="Foto de Sophie Robinson" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Sophie Robinson</strong><p>Adorei como o método é simples de entender e colocar em prática. Minha manhã ficou muito mais organizada!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>2h</span><span class="reactions">👍 ❤️ 21</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-3.png" alt="Foto de Victoria Carter" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Victoria Carter</strong><p>Finalmente encontrei uma orientação clara e sem complicação. Já faz parte da minha rotina e estou muito satisfeita.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 18</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-2.webp" alt="Foto de Lisa G." loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Lisa G.</strong><p>O passo a passo faz muito sentido e é super fácil de acompanhar. Recomendo para quem quer começar com mais confiança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 46</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-4.webp" alt="Foto de Madison Scott" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Madison Scott</strong><p>Em poucas semanas já percebi uma diferença positiva na minha disciplina. O conteúdo é direto, prático e motivador.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>55 min</span><span class="reactions">👍 ❤️ 63</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-5.webp" alt="Foto de Charlotte Williams" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Charlotte Williams</strong><p>Eu precisava de algo que coubesse na minha rotina. A proposta é objetiva e me ajudou a manter o foco todos os dias.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>40 min</span><span class="reactions">👍 ❤️ 58</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-6.png" alt="Foto de Daisy Collins" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Daisy Collins</strong><p>O material superou minhas expectativas. A explicação é acolhedora, fácil de aplicar e me trouxe muito mais segurança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>32 min</span><span class="reactions">👍 ❤️ 14</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-7.png" alt="Foto de Emily Lewis" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emily Lewis</strong><p>Estou seguindo o método há uma semana e já sinto minha rotina mais leve. Vale muito a pena conhecer o conteúdo completo!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>28 min</span><span class="reactions">👍 ❤️ 35</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-8.webp" alt="Foto de Olivia Martinez" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Olivia Martinez</strong><p>O melhor é que não parece complicado. As orientações são realistas e me ajudaram a tomar decisões melhores no dia a dia.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>20 min</span><span class="reactions">👍 ❤️ 49</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-9.webp" alt="Foto de Emma Clark" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emma Clark</strong><p>Conteúdo excelente e muito bem explicado. Estou surpresa com o quanto uma mudança simples pode melhorar minha constância.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>agora</span><span class="reactions">👍 ❤️ 72</span></div></div></article>
+    </div>
   </section>
 
   <footer class="footer">
