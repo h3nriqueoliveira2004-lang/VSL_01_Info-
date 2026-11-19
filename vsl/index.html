@@ -277,6 +277,20 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     const playButton = document.getElementById('play-button');
     let started = false;
 
+    // ----- Eventos do Pixel da Meta -----
+    const OFFER = { value: 17.90, currency: 'BRL', content_name: 'Reset Glicêmico' };
+    function track(event, params) { try { if (window.fbq) fbq('track', event, params); } catch (e) {} }
+    // InitiateCheckout: clique no botão de compra.
+    document.querySelectorAll('a.cta-btn').forEach(a => a.addEventListener('click', () => track('InitiateCheckout', OFFER)));
+    // ViewContent: dispara uma vez, quando a oferta (preço + botão) aparece na tela.
+    let viewContentSent = false;
+    if ('IntersectionObserver' in window) {
+      const offerObserver = new IntersectionObserver(entries => {
+        if (!viewContentSent && entries.some(e => e.isIntersecting)) { viewContentSent = true; track('ViewContent', OFFER); offerObserver.disconnect(); }
+      }, { threshold: 0.3 });
+      document.querySelectorAll('.offer-details').forEach(el => offerObserver.observe(el));
+    }
+
     function toggleFaq(button) {
       const answer = button.nextElementSibling;
       const isOpen = !answer.hidden;

@@ -294,7 +294,9 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     const answers = {};
     let current = -1; // -1 = tela de abertura
 
-    function track(event) { try { if (window.fbq) fbq('track', event); } catch (e) {} }
+    // Eventos do Pixel da Meta. Nenhuma resposta do quiz é enviada, só o nome do evento e o valor da oferta.
+    const OFFER = { value: 17.90, currency: 'BRL', content_name: 'Reset Glicêmico' };
+    function track(event, params) { try { if (window.fbq) fbq('track', event, params); } catch (e) {} }
     function scrollTop() { window.scrollTo({ top:0, behavior:'smooth' }); }
 
     function setProgress() {
@@ -471,7 +473,18 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
       button.setAttribute('aria-expanded', String(!isOpen));
       button.querySelector('span').textContent = isOpen ? '+' : '−';
     }
-    document.querySelectorAll('.js-checkout').forEach(a => a.addEventListener('click', () => track('InitiateCheckout')));
+    // InitiateCheckout: clique em qualquer botão de compra.
+    document.querySelectorAll('.js-checkout').forEach(a => a.addEventListener('click', () => track('InitiateCheckout', OFFER)));
+
+    // ViewContent: dispara uma vez, quando a oferta (preço + botão) aparece na tela.
+    let viewContentSent = false;
+    function sendViewContent() { if (viewContentSent) return; viewContentSent = true; track('ViewContent', OFFER); }
+    if ('IntersectionObserver' in window) {
+      const offerObserver = new IntersectionObserver(entries => {
+        if (entries.some(e => e.isIntersecting)) { sendViewContent(); offerObserver.disconnect(); }
+      }, { threshold: 0.3 });
+      document.querySelectorAll('.offer-details').forEach(el => offerObserver.observe(el));
+    }
 
     const buyerName = document.getElementById('buyer-name');
     const buyers = ['Mariana S.', 'Patrícia R.', 'Juliana M.', 'Carla A.'];
