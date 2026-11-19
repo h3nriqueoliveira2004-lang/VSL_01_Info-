@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Glicemia em Jejum Sob Controle</title>
-  <meta name="description" content="Garanta agora o seu acesso por R$ 17,90.">
+  <meta name="description" content="Garanta agora o seu acesso por R$ 47,90.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&family=Inter:wght@400;500;700;800;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
@@ -35,6 +35,8 @@
     .cta-btn:focus-visible { outline:3px solid var(--green); outline-offset:4px; }
     @keyframes pulse-cta { 0%,100% { transform:scale(1); } 50% { transform:scale(1.025); } }
     .microcopy { margin:12px 0 0; color:var(--muted); font-size:13px; }
+    .final-banner { display:block; width:100%; max-width:900px; margin:8px auto 0; border-radius:14px; overflow:hidden; box-shadow:0 16px 36px rgba(29,53,87,.16); }
+    .final-banner img { display:block; width:100%; height:auto; }
     .guarantee-seal { display:block; width:min(100%,220px); height:auto; margin:22px auto 0; }
 
     /* ===== O que você vai encontrar ===== */
@@ -131,9 +133,9 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     <img class="mockup" src="../images/mocap-vendas.jpg" alt="Livro Glicemia em Jejum sob Controle exibido em notebook, celular e tablet">
     <div class="offer-details">
       <p class="old-price">De R$ 97,00 por apenas:</p>
-      <p class="price">R$ 17,90</p>
+      <p class="price">R$ 47,90</p>
       <p class="price-note">Pagamento único • Acesso vitalício imediato e todos os bônus inclusos</p>
-      <a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn js-checkout">QUERO ACESSAR AGORA<small>Por apenas R$ 17,90</small></a>
+      <a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn js-checkout">QUERO ACESSAR AGORA<small>Por apenas R$ 47,90</small></a>
       <p class="microcopy">🔒 Compra 100% segura • Liberação imediata via Pix ou cartão</p>
       <img class="guarantee-seal" src="../images/selo-garantia.jpg" alt="Selo de garantia de 7 dias com devolução de 100% do dinheiro">
     </div>
@@ -185,10 +187,11 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
   </section>
 
   <section class="offer" aria-label="Oferta final">
+    <a href="https://pay.cakto.com.br/xvx5eks_1312706" class="final-banner js-checkout" aria-label="Liberar acesso ao Reset Glicêmico por R$ 47,90"><img src="../images/mocap-reset-glicemico.jpg" width="1400" height="594" alt="Reset Glicêmico: livro Glicemia em Jejum Sob Controle com os bônus 25 receitas para desinchar, A prevenção do Alzheimer e Celulite nunca mais, e selo de garantia de 7 dias" loading="lazy"></a>
     <div class="offer-details">
       <p class="old-price">De R$ 97,00 por apenas:</p>
-      <p class="price">R$ 17,90</p>
-      <a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn js-checkout">QUERO ACESSAR AGORA<small>Por apenas R$ 17,90</small></a>
+      <p class="price">R$ 47,90</p>
+      <a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn js-checkout">QUERO ACESSAR AGORA<small>Por apenas R$ 47,90</small></a>
       <p class="microcopy">🔒 Compra 100% segura • Liberação imediata via Pix ou cartão</p>
     </div>
   </section>
@@ -210,7 +213,7 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     }));
 
     // ----- Eventos do Pixel da Meta -----
-    const OFFER = { value: 17.90, currency: 'BRL', content_name: 'Reset Glicêmico' };
+    const OFFER = { value: 47.90, currency: 'BRL', content_name: 'Reset Glicêmico' };
     function track(event, params) { try { if (window.fbq) fbq('track', event, params); } catch (e) {} }
     // InitiateCheckout: clique em qualquer botão de compra.
     document.querySelectorAll('.js-checkout').forEach(a => a.addEventListener('click', () => track('InitiateCheckout', OFFER)));
