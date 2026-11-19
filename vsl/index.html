@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O Protocolo da 1ª Refeição</title>
+  <meta name="description" content="Uma refeição matinal de 5 minutos para manter sua glicemia abaixo de 140 o dia todo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&family=Inter:wght@400;500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#1d3557; --text:#111827; --muted:#64748b; --line:#dfe4ea; --comment:#f0f2f5; --blue:#1877f2; }
+    * { box-sizing:border-box; }
+    html { -webkit-text-size-adjust:100%; }
+    body { margin:0; min-height:100vh; min-height:100dvh; background:#fff; color:var(--text); font-family:Lato,Arial,sans-serif; display:flex; flex-direction:column; align-items:center; padding:16px; overflow-x:hidden; }
+    img, video { max-width:100%; }
+    .wrap { width:100%; max-width:900px; margin:0 auto; padding:0 18px; }
+
+    /* ===== Título + vídeo (sempre visíveis) ===== */
+    h1 { width:100%; max-width:900px; margin:0 0 20px; text-align:center; font:800 clamp(1.55rem,5vw,2.6rem)/1.2 Inter,sans-serif; text-wrap:balance; overflow-wrap:break-word; }
+    h1 span { display:block; }
+    h1 span:first-child { color:#b91c1c; }
+    h1 span:last-child { color:#3d1f1f; margin-top:8px; }
+    .video-slot { position:relative; width:100%; max-width:480px; aspect-ratio:4/5; border-radius:12px; overflow:hidden; background:#111; }
+    .video-slot video { display:block; width:100%; height:100%; object-fit:cover; background:#111; pointer-events:none; }
+    .play-button { position:absolute; z-index:2; top:50%; left:50%; width:88px; height:88px; transform:translate(-50%,-50%); display:grid; place-items:center; border:4px solid rgba(255,255,255,.92); border-radius:50%; background:#e11d2e; color:#fff; cursor:pointer; box-shadow:0 0 0 0 rgba(225,29,46,.72), 0 8px 22px rgba(0,0,0,.35); animation:pulse-play 1.7s infinite; }
+    .play-button::before { content:""; display:block; margin-left:7px; border-top:16px solid transparent; border-bottom:16px solid transparent; border-left:24px solid #fff; filter:drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
+    .play-button:hover { background:#be123c; }
+    .play-button:focus-visible { outline:3px solid #fff; outline-offset:5px; }
+    @keyframes pulse-play { 0%,100% { transform:translate(-50%,-50%) scale(1); box-shadow:0 0 0 0 rgba(225,29,46,.72), 0 8px 22px rgba(0,0,0,.35); } 50% { transform:translate(-50%,-50%) scale(1.08); box-shadow:0 0 0 18px rgba(225,29,46,0), 0 12px 28px rgba(0,0,0,.42); } }
+
+    /* ===== Controle de volume ===== */
+    .volume-bar { width:100%; max-width:480px; margin:12px auto 0; display:flex; align-items:center; gap:12px; padding:10px 14px; background:#f1f5f9; border-radius:12px; }
+    .volume-btn { flex:0 0 auto; width:40px; height:40px; display:grid; place-items:center; border:0; border-radius:50%; background:#1d3557; color:#fff; cursor:pointer; }
+    .volume-btn:hover { background:#16304d; }
+    .volume-btn:focus-visible { outline:3px solid #1877f2; outline-offset:3px; }
+    .volume-btn svg { width:22px; height:22px; }
+    .volume-btn .icon-off { display:none; }
+    .volume-btn.muted .icon-on { display:none; }
+    .volume-btn.muted .icon-off { display:block; }
+    .volume-slider { flex:1; min-width:0; height:6px; accent-color:#1d3557; cursor:pointer; }
+    .volume-label { flex:0 0 auto; font:700 12px Inter,sans-serif; color:#1d3557; }
+
+    /* ===== Conteúdo liberado após 15 min de vídeo ===== */
+    #after-video { width:100%; max-width:900px; display:flex; flex-direction:column; }
+    #after-video[hidden] { display:none; }
+    #after-video.reveal { animation:reveal-in .8s ease both; }
+    @keyframes reveal-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+    .social-proof-toast { position:fixed; top:18px; right:18px; z-index:20; display:flex; align-items:center; gap:10px; width:min(290px,calc(100vw - 36px)); padding:12px 14px; background:#fff; border-radius:12px; box-shadow:0 14px 34px rgba(17,24,39,.18); opacity:0; transform:translateY(-12px); pointer-events:none; animation:toast-in 5s ease-in-out infinite; }
+    .social-proof-dot { width:10px; height:10px; flex:0 0 10px; border-radius:50%; background:#16a34a; box-shadow:0 0 0 4px #dcfce7; }
+    .social-proof-toast strong { display:block; color:var(--navy); font:700 13px Inter,sans-serif; }
+    .social-proof-toast span { display:block; margin-top:2px; color:#64748b; font-size:12px; }
+    @keyframes toast-in { 0%,12% { opacity:0; transform:translateY(-12px); } 20%,72% { opacity:1; transform:translateY(0); } 82%,100% { opacity:0; transform:translateY(-12px); } }
+
+    .deliverables { margin:26px auto 8px; padding:28px 0 24px; background:#fff; }
+    .deliverables-badge { display:block; margin:0 auto 12px; color:#b91c1c; text-align:center; font:700 12px Inter,sans-serif; letter-spacing:.08em; }
+    .deliverables h2 { max-width:760px; margin:0 auto 12px; color:var(--navy); text-align:center; font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; }
+    .deliverables-intro { max-width:680px; margin:0 auto 28px; color:#52606d; text-align:center; font-size:15px; line-height:1.5; }
+    .deliverables-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 42px; }
+    .deliverable-card { padding:0; background:#fff; }
+    .deliverable-card svg { display:none; }
+    .deliverable-tag { display:block; margin-bottom:7px; padding:0; color:#b91c1c; background:transparent; font:700 12px/1.3 Inter,sans-serif; letter-spacing:.04em; }
+    .deliverable-card h3 { margin:0 0 7px; color:var(--navy); font:700 17px/1.3 Inter,sans-serif; }
+    .deliverable-card p { margin:0; color:#52606d; font-size:15px; line-height:1.5; }
+    .deliverables-callout { margin:28px auto 0; padding:0; max-width:760px; color:var(--navy); background:#fff; text-align:center; font:700 15px/1.5 Inter,sans-serif; }
+
+    .bonus-mockup { margin:28px auto 8px; padding:28px 18px 24px; display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center; }
+    .bonus-mockup h2 { margin:0 0 10px; color:var(--navy); font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; }
+    .bonus-mockup p { margin:0; color:#52606d; font-size:15px; line-height:1.5; }
+    .bonus-mockup img { width:100%; max-width:560px; justify-self:center; display:block; border-radius:16px; box-shadow:0 16px 36px rgba(29,53,87,.16); }
+
+    .faq { margin:0 auto 28px; padding:0 18px 18px; }
+    .faq h2 { margin:0 0 16px; color:var(--navy); text-align:center; font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; }
+    .faq-list { max-width:760px; margin:0 auto; border-top:1px solid var(--line); }
+    .faq-item { border-bottom:1px solid var(--line); }
+    .faq-item button { width:100%; padding:16px 0; border:0; background:none; color:var(--navy); display:flex; justify-content:space-between; text-align:left; font:700 16px Inter,sans-serif; cursor:pointer; }
+    .faq-item p { margin:0 0 16px; color:#52606d; font-size:15px; line-height:1.55; }
+
+    .comments { margin-top:28px; padding-bottom:30px; }
+    .comments h2 { color:var(--navy); font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; margin:0 0 22px; text-align:center; }
+    .comment-list { border:1px solid var(--line); border-radius:16px; padding:14px 14px 8px; }
+    .comment { display:flex; gap:12px; align-items:flex-start; padding:12px 0; }
+    .comment + .comment { border-top:1px solid #edf0f3; }
+    .avatar { width:44px; height:44px; flex:0 0 44px; border-radius:50%; overflow:hidden; background:#e5e7eb; }
+    .avatar img { width:100%; height:100%; display:block; object-fit:cover; }
+    .comment-content { min-width:0; flex:1; }
+    .bubble { background:var(--comment); border-radius:4px 14px 14px 14px; padding:9px 12px 10px; }
+    .comment strong { display:block; color:#174ea6; font:700 14px Inter,sans-serif; }
+    .comment p { margin:5px 0 0; font-size:15px; line-height:1.4; }
+    .comment-meta { display:flex; gap:14px; padding:4px 10px 0; color:var(--muted); font-size:12px; }
+    .reactions { float:right; color:#566; font-size:12px; }
+
+    .final-offer { margin:18px auto 0; padding:0 18px 10px; text-align:center; }
+    .final-offer img { width:100%; max-width:900px; height:auto; display:block; margin:0 auto; border-radius:18px; box-shadow:0 16px 36px rgba(29,53,87,.16); }
+    .offer-details { max-width:650px; margin:24px auto 0; text-align:center; }
+    .offer-details .old-price { margin:0; color:var(--muted); font:700 16px Inter,sans-serif; text-decoration:line-through; }
+    .offer-details .price { margin:4px 0 2px; color:var(--navy); font:800 clamp(2.8rem,10vw,4.6rem)/1 Inter,sans-serif; }
+    .offer-details .price-note { margin:0 0 18px; color:var(--muted); font-size:14px; }
+    .cta-btn { display:block; width:100%; max-width:520px; margin:0 auto; padding:18px 22px; color:#fff; background:#16a34a; border-radius:12px; box-shadow:0 12px 28px rgba(22,163,74,.28); font:800 clamp(.95rem,3vw,1.1rem)/1.25 Inter,sans-serif; text-decoration:none; animation:pulse-cta 1.8s infinite; }
+    .cta-btn:hover { background:#15803d; }
+    .cta-btn:focus-visible { outline:3px solid #16a34a; outline-offset:4px; }
+    @keyframes pulse-cta { 0%,100% { transform:scale(1); box-shadow:0 12px 28px rgba(22,163,74,.28); } 50% { transform:scale(1.025); box-shadow:0 16px 36px rgba(22,163,74,.45); } }
+    .microcopy { margin:12px 0 0; color:var(--muted); font-size:13px; }
+
+    /* ===== Pop-up aos 7min30 de vídeo ===== */
+    .vsl-popup { position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(17,24,39,.55); animation:popup-fade .3s ease both; }
+    .vsl-popup[hidden] { display:none; }
+    .vsl-popup-card { position:relative; width:100%; max-width:420px; padding:32px 26px 26px; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(17,24,39,.35); text-align:center; animation:popup-pop .35s ease both; }
+    .vsl-popup-card p { margin:0 0 20px; color:var(--navy); font:700 clamp(1.1rem,4.5vw,1.3rem)/1.4 Inter,sans-serif; }
+    .vsl-popup-btn { display:inline-block; padding:12px 28px; border:0; border-radius:10px; background:#16a34a; color:#fff; font:800 15px Inter,sans-serif; cursor:pointer; }
+    .vsl-popup-btn:hover { background:#15803d; }
+    .vsl-popup-btn:focus-visible { outline:3px solid #16a34a; outline-offset:3px; }
+    @keyframes popup-fade { from { opacity:0; } to { opacity:1; } }
+    @keyframes popup-pop { from { opacity:0; transform:translateY(14px) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+    /* ===== Selo e rodapé (sempre visíveis) ===== */
+    .guarantee-seal { display:block; width:min(100%,260px); height:auto; margin:24px auto 0; }
+    .footer { padding:20px 0 24px; text-align:center; color:#555; font-size:13px; }
+    .footer p { margin:6px 0; }
+
+    h2, h3, .deliverables-badge, .deliverable-tag { text-align:center; }
+    .deliverables-intro, .deliverable-card p, .comment p, .deliverables-callout, .offer-details .price-note, .microcopy { text-align:justify; text-justify:inter-word; hyphens:auto; -webkit-hyphens:auto; }
+
+    @media (max-width:650px) {
+      body { padding:12px; }
+      .video-slot { border-radius:10px; }
+      .play-button { width:72px; height:72px; border-width:3px; }
+      .play-button::before { margin-left:5px; border-top-width:13px; border-bottom-width:13px; border-left-width:20px; }
+      .social-proof-toast { top:auto; bottom:14px; right:auto; left:50%; margin-left:calc(min(280px,calc(100vw - 32px)) / -2); width:min(280px,calc(100vw - 32px)); }
+      @keyframes toast-in { 0%,12% { opacity:0; transform:translateY(12px); } 20%,72% { opacity:1; transform:translateY(0); } 82%,100% { opacity:0; transform:translateY(12px); } }
+      .deliverables { margin-top:12px; padding:20px 16px 14px; }
+      .deliverables-badge { font-size:11px; }
+      .deliverables h2 { font-size:1.4rem; }
+      .deliverables-grid { grid-template-columns:1fr; gap:22px; }
+      .deliverables-intro { text-align:left; font-size:14.5px; line-height:1.55; margin-bottom:22px; }
+      .deliverable-card { padding-bottom:18px; border-bottom:1px solid #edf0f3; }
+      .deliverable-card:last-child { border-bottom:0; padding-bottom:0; }
+      .deliverable-card h3 { font-size:16px; }
+      .deliverable-card p { font-size:14.5px; }
+      .deliverables-callout { font-size:14px; margin-top:22px; }
+      .bonus-mockup { grid-template-columns:1fr; padding-left:16px; padding-right:16px; gap:18px; }
+      .faq { padding-left:16px; padding-right:16px; }
+      .comments { margin-top:18px; padding-left:4px; padding-right:4px; }
+      .comments h2 { font-size:1.35rem; margin-bottom:16px; }
+      .comment-list { padding:6px 10px; border-radius:14px; }
+      .comment { gap:9px; }
+      .comment p { font-size:14px; }
+      .avatar { width:40px; height:40px; flex-basis:40px; }
+      .comment-meta { padding-left:4px; flex-wrap:wrap; }
+      .final-offer { padding:0 4px 8px; }
+      .final-offer img { border-radius:12px; }
+      .offer-details { margin-top:20px; padding:0 2px; }
+      .offer-details .old-price { font-size:15px; }
+      .offer-details .price-note { padding:0 6px; line-height:1.45; }
+      .cta-btn { max-width:100%; padding:16px 12px; font-size:14px; }
+      .microcopy { line-height:1.45; padding:0 6px; }
+      .footer { padding-bottom:84px; }
+    }
+    @media (max-width:380px) {
+      .price { font-size:2.75rem !important; }
+      .comment-meta { gap:8px; font-size:11px; }
+      .reactions { display:none; }
+      .cta-btn { font-size:13px; }
+    }
+  </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '28568663332812896');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+<body>
+  <h1><span>Glicemia abaixo de 140 o dia todo.</span><span>Uma refeição matinal de 5 minutos foi suficiente.</span></h1>
+
+  <div class="video-slot">
+    <video id="vsl-video" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+      <source src="/vsl.mp4" type="video/mp4">
+      Seu navegador não suporta vídeo.
+    </video>
+    <button class="play-button" id="play-button" type="button" aria-label="Reproduzir vídeo"></button>
+  </div>
+
+  <div class="volume-bar">
+    <button class="volume-btn" id="volume-btn" type="button" aria-label="Ativar ou silenciar o som">
+      <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="m16 9 5 6M21 9l-5 6"/></svg>
+    </button>
+    <input class="volume-slider" id="volume-slider" type="range" min="0" max="100" value="100" aria-label="Volume">
+    <span class="volume-label" id="volume-label">100%</span>
+  </div>
+
+  <!-- Pop-up exibido aos 7min30 de vídeo -->
+  <div class="vsl-popup" id="vsl-popup" role="dialog" aria-modal="true" aria-labelledby="vsl-popup-texto" hidden>
+    <div class="vsl-popup-card">
+      <p id="vsl-popup-texto">Ainda está aí, temos 3 bônus exclusivos para você, aguarde e confira</p>
+      <button class="vsl-popup-btn" id="vsl-popup-close" type="button">Sim estou aqui</button>
+    </div>
+  </div>
+
+  <!-- Todo o conteúdo abaixo só aparece depois de 15 minutos de vídeo assistido -->
+  <div id="after-video">
+    <div class="social-proof-toast" aria-live="polite">
+      <span class="social-proof-dot" aria-hidden="true"></span>
+      <div><strong id="buyer-name">Mariana S.</strong><span>Comprou</span></div>
+    </div>
+
+    <section class="deliverables wrap" aria-labelledby="encontrar-titulo">
+      <span class="deliverables-badge">CIÊNCIA NUTRICIONAL APLICADA</span>
+      <h2 id="encontrar-titulo">O que você vai encontrar</h2>
+      <p class="deliverables-intro">Se você já cortou carboidratos, tentou jejum intermitente ou trocou de medicação sem ver o visor do medidor baixar, é normal ter um pé atrás. O motivo pelo qual tudo falhou antes é simples: você tentava controlar o almoço e o jantar na força de vontade enquanto o seu café da manhã travava o seu pâncreas logo às 7h30. Baseado no <strong>Efeito da Segunda Refeição</strong> (descoberto na Universidade de Toronto e replicado na Universidade de Lund), este método usa fibras específicas de fermentação lenta para ativar o <strong>propionato</strong> no intestino — um sinal químico natural que viaja até o fígado e &quot;abre&quot; o termostato da sua sensibilidade à insulina pelas próximas 24 horas.</p>
+      <div class="deliverables-grid">
+        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg><span class="deliverable-tag">PROTOCOLO PRINCIPAL</span><h3>O Protocolo da 1ª Refeição (30 Combinações)</h3><p>O fichário completo com as 30 refeições matinais testadas que levam apenas 5 minutos para fazer, custam cerca de R$ 5 e ativam o gatilho do propionato antes das 8h00 da manhã para blindar seu almoço e jantar.</p></article>
+        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg><span class="deliverable-tag">GUIA PRÁTICO</span><h3>Mapa de Supermercado (A Lista de R$ 5)</h3><p>Um guia direto ao ponto, corredor por corredor, indicando exatamente quais marcas colocar no carrinho no Atacadão, Assaí, Carrefour ou mercado de bairro. Entre e saia em 15 minutos sem precisar decifrar rótulos.</p></article>
+        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v14H4zM7 9h10M7 13h7M7 17h4"/></svg><span class="deliverable-tag">BÔNUS #1 — HOJE GRÁTIS</span><h3>Manual de prevenção ao alzheimer</h3><p>O passo a passo de como evitar o alzheimer.</p></article>
+        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18M4 8h16M6 5h12M6 19h12"/></svg><span class="deliverable-tag">BÔNUS #2 — HOJE GRÁTIS</span><h3>25 receitas para desinchar</h3><p>Receitas maravilhosas e gostosas que te desincham sem o famoso &quot;Efeito sanfona&quot; e sem abrir mão do sabor.</p></article>
+        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3c4 4 6 7 6 11a6 6 0 0 1-12 0c0-4 2-7 6-11Z"/></svg><span class="deliverable-tag">BÔNUS #3 — HOJE GRÁTIS</span><h3>Celulite nunca mais</h3><p>Esse é o guia passo a passo de como eliminar e suavizar as celulites.</p></article>
+      </div>
+      <p class="deliverables-callout"><strong>Zero pílulas milagrosas, zero jejuns extremos e zero ingredientes caros.</strong> É comida de verdade, organizada na ordem bioquímica certa para o seu pâncreas voltar a trabalhar a seu favor.</p>
+    </section>
+
+    <section class="bonus-mockup wrap" aria-labelledby="bonus-mockup-titulo">
+      <div><span class="deliverables-badge">TODOS OS BÔNUS INCLUSOS</span><h2 id="bonus-mockup-titulo">Você recebe muito mais do que um guia</h2><p>Veja os materiais extras que acompanham o protocolo e tornam sua experiência ainda mais completa.</p></div>
+      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/mocap%20imagem%20dos%20bonus.jfif-W7mFYhJP3x4l6lUi0OJ8YfKtL6kGJN.jpeg" alt="Mockup dos três e-books bônus: receitas para desinchar, prevenção do Alzheimer e celulite nunca mais" loading="lazy">
+    </section>
+
+    <section class="faq wrap" aria-labelledby="faq-titulo">
+      <h2 id="faq-titulo">Perguntas frequentes</h2>
+      <div class="faq-list">
+        <article class="faq-item"><button type="button" aria-expanded="false" onclick="toggleFaq(this)">Como vou receber meu produto?<span>+</span></button><p hidden>O guia Glicemia em Jejum sobre controle e todos os bônus são enviados imediatamente no seu e-mail após o pagamento.</p></article>
+        <article class="faq-item"><button type="button" aria-expanded="false" onclick="toggleFaq(this)">Preciso comprar algum ingrediente especial?<span>+</span></button><p hidden>Não. O protocolo foi pensado para usar alimentos simples, acessíveis e fáceis de encontrar no mercado.</p></article>
+        <article class="faq-item"><button type="button" aria-expanded="false" onclick="toggleFaq(this)">Posso acessar pelo celular?<span>+</span></button><p hidden>Sim. Você pode acessar os materiais pelo celular, tablet ou computador.</p></article>
+        <article class="faq-item"><button type="button" aria-expanded="false" onclick="toggleFaq(this)">Por quanto tempo terei acesso?<span>+</span></button><p hidden>O acesso é vitalício. Depois da liberação, você poderá consultar o conteúdo sempre que precisar.</p></article>
+        <article class="faq-item"><button type="button" aria-expanded="false" onclick="toggleFaq(this)">Em quanto tempo tenho resultados significativos?<span>+</span></button><p hidden>Dentro de 2 dias você já consegue visualizar uma melhora em seus níveis de glicemia pela manhã.</p></article>
+      </div>
+    </section>
+
+    <section class="comments wrap" id="comentarios" aria-labelledby="comentarios-titulo">
+      <h2 id="comentarios-titulo">O que as pessoas estão dizendo</h2>
+      <div class="comment-list">
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-1.webp" alt="Foto de Sophie Robinson" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Sophie Robinson</strong><p>Adorei como o método é simples de entender e colocar em prática. Minha manhã ficou muito mais organizada!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>2h</span><span class="reactions">👍 ❤️ 21</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-3.png" alt="Foto de Victoria Carter" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Victoria Carter</strong><p>Finalmente encontrei uma orientação clara e sem complicação. Já faz parte da minha rotina e estou muito satisfeita.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 18</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-2.webp" alt="Foto de Lisa G." loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Lisa G.</strong><p>O passo a passo faz muito sentido e é super fácil de acompanhar. Recomendo para quem quer começar com mais confiança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 46</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-4.webp" alt="Foto de Madison Scott" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Madison Scott</strong><p>Em poucas semanas já percebi uma diferença positiva na minha disciplina. O conteúdo é direto, prático e motivador.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>55 min</span><span class="reactions">👍 ❤️ 63</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-5.webp" alt="Foto de Charlotte Williams" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Charlotte Williams</strong><p>Eu precisava de algo que coubesse na minha rotina. A proposta é objetiva e me ajudou a manter o foco todos os dias.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>40 min</span><span class="reactions">👍 ❤️ 58</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-6.png" alt="Foto de Daisy Collins" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Daisy Collins</strong><p>O material superou minhas expectativas. A explicação é acolhedora, fácil de aplicar e me trouxe muito mais segurança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>32 min</span><span class="reactions">👍 ❤️ 14</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-7.png" alt="Foto de Emily Lewis" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emily Lewis</strong><p>Estou seguindo o método há uma semana e já sinto minha rotina mais leve. Vale muito a pena conhecer o conteúdo completo!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>28 min</span><span class="reactions">👍 ❤️ 35</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-8.webp" alt="Foto de Olivia Martinez" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Olivia Martinez</strong><p>O melhor é que não parece complicado. As orientações são realistas e me ajudaram a tomar decisões melhores no dia a dia.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>20 min</span><span class="reactions">👍 ❤️ 49</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="/images/rosto-9.webp" alt="Foto de Emma Clark" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emma Clark</strong><p>Conteúdo excelente e muito bem explicado. Estou surpresa com o quanto uma mudança simples pode melhorar minha constância.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>agora</span><span class="reactions">👍 ❤️ 72</span></div></div></article>
+      </div>
+    </section>
+
+    <section class="final-offer" aria-label="Apresentação do produto">
+      <img src="/images/mocap-vendas.jpg" alt="Livro Glicemia em Jejum sob Controle exibido em notebook, celular e tablet" loading="lazy">
+      <div class="offer-details"><p class="old-price">De R$ 97,00 por apenas:</p><p class="price">R$ 37,90</p><p class="price-note">Pagamento único • Acesso vitalício imediato e todos os bônus inclusos</p><a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn">QUERO ACESSAR O PROTOCOLO POR R$ 37,90</a><p class="microcopy">🔒 Compra 100% Segura • Liberação imediata no celular via Pix ou Cartão</p></div>
+    </section>
+  </div>
+
+  <img class="guarantee-seal" src="/images/selo-garantia.jpg" alt="Selo de garantia de 7 dias com devolução de 100% do dinheiro">
+
+  <footer class="footer"><p>Suas informações estão 100% seguras e nunca serão compartilhadas com ninguém.</p><p>© 2025 | <a href="#">Informações legais</a></p></footer>
+
+  <script>
+    const video = document.getElementById('vsl-video');
+    const playButton = document.getElementById('play-button');
+    let started = false;
+
+    function toggleFaq(button) {
+      const answer = button.nextElementSibling;
+      const isOpen = !answer.hidden;
+      answer.hidden = isOpen;
+      button.setAttribute('aria-expanded', String(!isOpen));
+      button.querySelector('span').textContent = isOpen ? '+' : '−';
+    }
+
+    // ----- Pop-up "Ainda está aí": aos 7min30 (450 s) de vídeo, ou quando o lead abaixa o volume. Não pausa o vídeo -----
+    const POPUP_AT_SECONDS = 7 * 60 + 30;
+    const popup = document.getElementById('vsl-popup');
+    let popupShownByTime = false;
+    function showPopup() { popup.hidden = false; }
+    video.addEventListener('timeupdate', () => {
+      if (!popupShownByTime && video.currentTime >= POPUP_AT_SECONDS) {
+        popupShownByTime = true;
+        showPopup();
+      }
+    });
+    document.getElementById('vsl-popup-close').addEventListener('click', () => { popup.hidden = true; });
+
+    // ----- Prova social (só roda depois de liberada) -----
+    const buyerName = document.getElementById('buyer-name');
+    const buyers = ['Mariana S.', 'Patrícia R.', 'Juliana M.', 'Carla A.'];
+    let buyerIndex = 0;
+    setInterval(() => {
+      buyerIndex = (buyerIndex + 1) % buyers.length;
+      buyerName.textContent = buyers[buyerIndex];
+    }, 5000);
+
+    // ----- Play inicial (os navegadores exigem um clique) -----
+    playButton.addEventListener('click', () => {
+      started = true;
+      playButton.style.display = 'none';
+      video.play();
+    });
+
+    // Depois de iniciado, não deixa pausar: se pausar por qualquer motivo, retoma.
+    video.addEventListener('pause', () => {
+      if (started && !video.ended) video.play().catch(() => {});
+    });
+
+    // ----- Controle de volume (botão de mudo + barra deslizante) -----
+    const volumeBtn = document.getElementById('volume-btn');
+    const volumeSlider = document.getElementById('volume-slider');
+    const volumeLabel = document.getElementById('volume-label');
+    let lastVolume = 100;
+
+    function renderVolume() {
+      const level = video.muted ? 0 : Math.round(video.volume * 100);
+      volumeSlider.value = level;
+      volumeLabel.textContent = level + '%';
+      volumeBtn.classList.toggle('muted', level === 0);
+    }
+    volumeSlider.addEventListener('input', () => {
+      const level = Number(volumeSlider.value);
+      const previousLevel = video.muted ? 0 : Math.round(video.volume * 100);
+      video.muted = level === 0;
+      video.volume = level / 100;
+      if (level > 0) lastVolume = level;
+      renderVolume();
+      if (level < previousLevel) showPopup(); // lead abaixou o volume
+    });
+    volumeBtn.addEventListener('click', () => {
+      if (video.muted || video.volume === 0) {
+        video.muted = false;
+        video.volume = (lastVolume || 100) / 100;
+        renderVolume();
+      } else {
+        lastVolume = Math.round(video.volume * 100);
+        video.muted = true;
+        renderVolume();
+        showPopup(); // lead silenciou o vídeo
+      }
+    });
+    video.addEventListener('volumechange', renderVolume);
+
+    // Bloqueia menu de clique direito e atalhos de teclado (espaço, K) no vídeo.
+    video.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space' || e.key === 'k' || e.key === 'K' || e.key === 'MediaPlayPause') e.preventDefault();
+    });
+
+    // Ao voltar para a aba, garante que o vídeo continue tocando.
+    document.addEventListener('visibilitychange', () => {
+      if (started && !document.hidden && !video.ended && video.paused) video.play().catch(() => {});
+    });
+  </script>
+</body>
+</html>

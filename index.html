@@ -3,82 +3,121 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>O Protocolo da 1ª Refeição</title>
-  <meta name="description" content="Uma refeição matinal de 5 minutos para manter sua glicemia abaixo de 140 o dia todo.">
+  <title>Teste da 1ª Refeição</title>
+  <meta name="description" content="Responda 10 perguntas rápidas e descubra como o seu café da manhã pode estar influenciando a sua glicemia ao longo do dia.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&family=Inter:wght@400;500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root { --navy:#1d3557; --text:#111827; --muted:#64748b; --line:#dfe4ea; --comment:#f0f2f5; --blue:#1877f2; }
+    :root { --navy:#1d3557; --text:#111827; --muted:#64748b; --line:#dfe4ea; --comment:#f0f2f5; --red:#b91c1c; --green:#16a34a; --bg:#f4f6f9; }
     * { box-sizing:border-box; }
     html { -webkit-text-size-adjust:100%; }
-    body { margin:0; min-height:100vh; min-height:100dvh; background:#fff; color:var(--text); font-family:Lato,Arial,sans-serif; display:flex; flex-direction:column; align-items:center; padding:16px; overflow-x:hidden; }
-    img, video { max-width:100%; }
+    body { margin:0; min-height:100vh; min-height:100dvh; background:var(--bg); color:var(--text); font-family:Lato,Arial,sans-serif; overflow-x:hidden; }
+    img { max-width:100%; }
+    button { font:inherit; }
+
+    /* ===== Topo do quiz: progresso ===== */
+    .quiz-top { position:sticky; top:0; z-index:10; background:var(--bg); padding:14px 16px 10px; }
+    .quiz-top-inner { max-width:520px; margin:0 auto; display:flex; align-items:center; gap:12px; }
+    .back-btn { flex:0 0 36px; width:36px; height:36px; display:grid; place-items:center; border:0; border-radius:50%; background:#fff; color:var(--navy); cursor:pointer; box-shadow:0 2px 8px rgba(17,24,39,.08); }
+    .back-btn[hidden] { display:grid; visibility:hidden; }
+    .back-btn svg { width:18px; height:18px; }
+    .progress { flex:1; height:8px; border-radius:99px; background:#e2e8f0; overflow:hidden; }
+    .progress-fill { height:100%; width:0; border-radius:99px; background:var(--green); transition:width .35s ease; }
+    .progress-label { flex:0 0 auto; min-width:38px; text-align:right; color:var(--muted); font:700 12px Inter,sans-serif; }
+    .quiz-top.hide { display:none; }
+
+    /* ===== Cartão de cada etapa ===== */
+    .quiz { max-width:520px; margin:0 auto; padding:6px 16px 32px; }
+    .step { animation:step-in .35s ease both; }
+    @keyframes step-in { from { opacity:0; transform:translateX(18px); } to { opacity:1; transform:translateX(0); } }
+    .eyebrow { display:block; margin:0 0 10px; color:var(--red); text-align:center; font:800 12px Inter,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+    .step h1, .step h2 { margin:0 0 10px; color:var(--navy); text-align:center; font:800 clamp(1.35rem,5.4vw,1.75rem)/1.25 Inter,sans-serif; text-wrap:balance; }
+    .step .sub { margin:0 0 22px; color:#52606d; text-align:center; font-size:16px; line-height:1.5; }
+    .options { display:grid; gap:12px; }
+    .option { width:100%; display:flex; align-items:center; gap:14px; padding:16px 18px; border:2px solid #e2e8f0; border-radius:14px; background:#fff; color:var(--text); text-align:left; font:700 16px/1.3 Inter,sans-serif; cursor:pointer; box-shadow:0 2px 8px rgba(17,24,39,.05); transition:border-color .15s, background .15s, transform .1s; }
+    .option:hover { border-color:#94a3b8; }
+    .option:active { transform:scale(.98); }
+    .option:focus-visible { outline:3px solid var(--navy); outline-offset:2px; }
+    .option.selected { border-color:var(--green); background:#f0fdf4; }
+    .option .emoji { flex:0 0 auto; font-size:24px; line-height:1; }
+    .options.two { grid-template-columns:1fr 1fr; }
+    .options.two .option { flex-direction:column; justify-content:center; padding:22px 12px; text-align:center; }
+    .options.two .option .emoji { font-size:44px; }
+
+    .primary-btn { display:block; width:100%; margin:22px 0 0; padding:18px 20px; border:0; border-radius:14px; background:var(--green); color:#fff; text-align:center; text-decoration:none; font:800 17px/1.25 Inter,sans-serif; cursor:pointer; box-shadow:0 12px 28px rgba(22,163,74,.28); animation:pulse-cta 1.8s infinite; }
+    .primary-btn:hover { background:#15803d; }
+    .primary-btn:focus-visible { outline:3px solid var(--green); outline-offset:4px; }
+    @keyframes pulse-cta { 0%,100% { transform:scale(1); } 50% { transform:scale(1.025); } }
+    .note { margin:12px 0 0; color:var(--muted); text-align:center; font-size:13px; line-height:1.45; }
+
+    .intro-img { display:block; width:100%; margin:4px 0 18px; border-radius:16px; box-shadow:0 14px 30px rgba(29,53,87,.14); }
+    .intro-points { margin:0 0 4px; padding:0; list-style:none; display:grid; gap:8px; }
+    .intro-points li { display:flex; gap:10px; align-items:center; color:var(--navy); font:700 15px Inter,sans-serif; }
+    .intro-points li::before { content:"✓"; flex:0 0 22px; height:22px; display:grid; place-items:center; border-radius:50%; background:#dcfce7; color:var(--green); font-size:13px; }
+
+    .info-card { padding:22px 20px; border-radius:16px; background:#fff; box-shadow:0 8px 24px rgba(17,24,39,.07); }
+    .info-card p { margin:0 0 12px; color:#334155; font-size:16px; line-height:1.55; }
+    .info-card p:last-child { margin-bottom:0; }
+    .info-chart { display:block; width:100%; margin:6px 0 14px; }
+
+    /* ===== Tela de análise ===== */
+    .loading { text-align:center; padding-top:30px; }
+    .ring { width:120px; height:120px; margin:0 auto 18px; position:relative; }
+    .ring svg { width:100%; height:100%; transform:rotate(-90deg); }
+    .ring-value { position:absolute; inset:0; display:grid; place-items:center; color:var(--navy); font:800 26px Inter,sans-serif; }
+    .checklist { max-width:340px; margin:22px auto 0; padding:0; list-style:none; text-align:left; display:grid; gap:12px; }
+    .checklist li { display:flex; gap:10px; align-items:center; color:#94a3b8; font:700 15px Inter,sans-serif; transition:color .3s; }
+    .checklist li::before { content:""; flex:0 0 20px; height:20px; border-radius:50%; border:2px solid #cbd5e1; transition:all .3s; }
+    .checklist li.done { color:var(--navy); }
+    .checklist li.done::before { border-color:var(--green); background:var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/14px no-repeat; }
+
+    /* ===== Resultado ===== */
+    .result-card { padding:24px 20px; border-radius:18px; background:#fff; box-shadow:0 10px 30px rgba(17,24,39,.08); }
+    .result-badge { display:inline-block; margin:0 auto 10px; padding:6px 12px; border-radius:99px; background:#fee2e2; color:var(--red); font:800 12px Inter,sans-serif; letter-spacing:.04em; }
+    .result-card .center { text-align:center; }
+    .result-card h2 { margin:0 0 12px; color:var(--navy); text-align:center; font:800 clamp(1.3rem,5vw,1.6rem)/1.25 Inter,sans-serif; }
+    .result-card p { margin:0 0 12px; color:#334155; font-size:16px; line-height:1.55; }
+    .meter { margin:16px 0 18px; }
+    .meter-bar { position:relative; height:12px; border-radius:99px; background:linear-gradient(90deg,#22c55e 0%,#facc15 50%,#ef4444 100%); }
+    .meter-pin { position:absolute; top:50%; width:22px; height:22px; margin-left:-11px; border:4px solid #fff; border-radius:50%; background:var(--navy); transform:translateY(-50%); box-shadow:0 2px 8px rgba(0,0,0,.25); transition:left 1s ease; left:0; }
+    .meter-labels { display:flex; justify-content:space-between; margin-top:8px; color:var(--muted); font:700 11px Inter,sans-serif; }
+    .summary { margin:14px 0 0; padding:0; list-style:none; display:grid; gap:10px; }
+    .summary li { display:flex; gap:10px; align-items:flex-start; font-size:15px; line-height:1.45; color:#334155; }
+    .summary li span { flex:0 0 auto; }
+    .medical-note { margin:16px 0 0; padding:12px 14px; border-left:4px solid #f59e0b; border-radius:8px; background:#fffbeb; color:#78350f; font-size:14px; line-height:1.5; }
+
+    /* ===== Oferta (aparece depois do resultado) ===== */
+    #offer[hidden] { display:none; }
+    #offer { background:#fff; margin-top:28px; padding:8px 0 0; }
     .wrap { width:100%; max-width:900px; margin:0 auto; padding:0 18px; }
-
-    /* ===== Título + vídeo (sempre visíveis) ===== */
-    h1 { width:100%; max-width:900px; margin:0 0 20px; text-align:center; font:800 clamp(1.55rem,5vw,2.6rem)/1.2 Inter,sans-serif; text-wrap:balance; overflow-wrap:break-word; }
-    h1 span { display:block; }
-    h1 span:first-child { color:#b91c1c; }
-    h1 span:last-child { color:#3d1f1f; margin-top:8px; }
-    .video-slot { position:relative; width:100%; max-width:480px; aspect-ratio:4/5; border-radius:12px; overflow:hidden; background:#111; }
-    .video-slot video { display:block; width:100%; height:100%; object-fit:cover; background:#111; pointer-events:none; }
-    .play-button { position:absolute; z-index:2; top:50%; left:50%; width:88px; height:88px; transform:translate(-50%,-50%); display:grid; place-items:center; border:4px solid rgba(255,255,255,.92); border-radius:50%; background:#e11d2e; color:#fff; cursor:pointer; box-shadow:0 0 0 0 rgba(225,29,46,.72), 0 8px 22px rgba(0,0,0,.35); animation:pulse-play 1.7s infinite; }
-    .play-button::before { content:""; display:block; margin-left:7px; border-top:16px solid transparent; border-bottom:16px solid transparent; border-left:24px solid #fff; filter:drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
-    .play-button:hover { background:#be123c; }
-    .play-button:focus-visible { outline:3px solid #fff; outline-offset:5px; }
-    @keyframes pulse-play { 0%,100% { transform:translate(-50%,-50%) scale(1); box-shadow:0 0 0 0 rgba(225,29,46,.72), 0 8px 22px rgba(0,0,0,.35); } 50% { transform:translate(-50%,-50%) scale(1.08); box-shadow:0 0 0 18px rgba(225,29,46,0), 0 12px 28px rgba(0,0,0,.42); } }
-
-    /* ===== Controle de volume ===== */
-    .volume-bar { width:100%; max-width:480px; margin:12px auto 0; display:flex; align-items:center; gap:12px; padding:10px 14px; background:#f1f5f9; border-radius:12px; }
-    .volume-btn { flex:0 0 auto; width:40px; height:40px; display:grid; place-items:center; border:0; border-radius:50%; background:#1d3557; color:#fff; cursor:pointer; }
-    .volume-btn:hover { background:#16304d; }
-    .volume-btn:focus-visible { outline:3px solid #1877f2; outline-offset:3px; }
-    .volume-btn svg { width:22px; height:22px; }
-    .volume-btn .icon-off { display:none; }
-    .volume-btn.muted .icon-on { display:none; }
-    .volume-btn.muted .icon-off { display:block; }
-    .volume-slider { flex:1; min-width:0; height:6px; accent-color:#1d3557; cursor:pointer; }
-    .volume-label { flex:0 0 auto; font:700 12px Inter,sans-serif; color:#1d3557; }
-
-    /* ===== Conteúdo liberado após 15 min de vídeo ===== */
-    #after-video { width:100%; max-width:900px; display:flex; flex-direction:column; }
-    #after-video[hidden] { display:none; }
-    #after-video.reveal { animation:reveal-in .8s ease both; }
-    @keyframes reveal-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-
-    .social-proof-toast { position:fixed; top:18px; right:18px; z-index:20; display:flex; align-items:center; gap:10px; width:min(290px,calc(100vw - 36px)); padding:12px 14px; background:#fff; border-radius:12px; box-shadow:0 14px 34px rgba(17,24,39,.18); opacity:0; transform:translateY(-12px); pointer-events:none; animation:toast-in 5s ease-in-out infinite; }
-    .social-proof-dot { width:10px; height:10px; flex:0 0 10px; border-radius:50%; background:#16a34a; box-shadow:0 0 0 4px #dcfce7; }
+    .social-proof-toast { position:fixed; bottom:14px; left:50%; z-index:20; display:flex; align-items:center; gap:10px; width:min(280px,calc(100vw - 32px)); margin-left:calc(min(280px,calc(100vw - 32px)) / -2); padding:12px 14px; background:#fff; border-radius:12px; box-shadow:0 14px 34px rgba(17,24,39,.18); opacity:0; pointer-events:none; animation:toast-in 5s ease-in-out infinite; }
+    .social-proof-dot { width:10px; height:10px; flex:0 0 10px; border-radius:50%; background:var(--green); box-shadow:0 0 0 4px #dcfce7; }
     .social-proof-toast strong { display:block; color:var(--navy); font:700 13px Inter,sans-serif; }
     .social-proof-toast span { display:block; margin-top:2px; color:#64748b; font-size:12px; }
-    @keyframes toast-in { 0%,12% { opacity:0; transform:translateY(-12px); } 20%,72% { opacity:1; transform:translateY(0); } 82%,100% { opacity:0; transform:translateY(-12px); } }
+    @keyframes toast-in { 0%,12% { opacity:0; transform:translateY(12px); } 20%,72% { opacity:1; transform:translateY(0); } 82%,100% { opacity:0; transform:translateY(12px); } }
 
-    .deliverables { margin:26px auto 8px; padding:28px 0 24px; background:#fff; }
-    .deliverables-badge { display:block; margin:0 auto 12px; color:#b91c1c; text-align:center; font:700 12px Inter,sans-serif; letter-spacing:.08em; }
-    .deliverables h2 { max-width:760px; margin:0 auto 12px; color:var(--navy); text-align:center; font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; }
-    .deliverables-intro { max-width:680px; margin:0 auto 28px; color:#52606d; text-align:center; font-size:15px; line-height:1.5; }
+    .deliverables { margin:26px auto 8px; padding:28px 18px 24px; }
+    .deliverables-badge { display:block; margin:0 auto 12px; color:var(--red); text-align:center; font:700 12px Inter,sans-serif; letter-spacing:.08em; }
+    .deliverables h2, .bonus-mockup h2, .faq h2, .comments h2 { margin:0 0 12px; color:var(--navy); text-align:center; font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; }
+    .deliverables-intro { max-width:680px; margin:0 auto 28px; color:#52606d; font-size:15px; line-height:1.55; }
     .deliverables-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 42px; }
-    .deliverable-card { padding:0; background:#fff; }
-    .deliverable-card svg { display:none; }
-    .deliverable-tag { display:block; margin-bottom:7px; padding:0; color:#b91c1c; background:transparent; font:700 12px/1.3 Inter,sans-serif; letter-spacing:.04em; }
-    .deliverable-card h3 { margin:0 0 7px; color:var(--navy); font:700 17px/1.3 Inter,sans-serif; }
+    .deliverable-tag { display:block; margin-bottom:7px; color:var(--red); text-align:center; font:700 12px/1.3 Inter,sans-serif; letter-spacing:.04em; }
+    .deliverable-card h3 { margin:0 0 7px; color:var(--navy); text-align:center; font:700 17px/1.3 Inter,sans-serif; }
     .deliverable-card p { margin:0; color:#52606d; font-size:15px; line-height:1.5; }
-    .deliverables-callout { margin:28px auto 0; padding:0; max-width:760px; color:var(--navy); background:#fff; text-align:center; font:700 15px/1.5 Inter,sans-serif; }
+    .deliverables-callout { margin:28px auto 0; max-width:760px; color:var(--navy); text-align:center; font:700 15px/1.5 Inter,sans-serif; }
 
     .bonus-mockup { margin:28px auto 8px; padding:28px 18px 24px; display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center; }
-    .bonus-mockup h2 { margin:0 0 10px; color:var(--navy); font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; }
-    .bonus-mockup p { margin:0; color:#52606d; font-size:15px; line-height:1.5; }
+    .bonus-mockup p { margin:0; color:#52606d; font-size:15px; line-height:1.5; text-align:center; }
     .bonus-mockup img { width:100%; max-width:560px; justify-self:center; display:block; border-radius:16px; box-shadow:0 16px 36px rgba(29,53,87,.16); }
 
     .faq { margin:0 auto 28px; padding:0 18px 18px; }
-    .faq h2 { margin:0 0 16px; color:var(--navy); text-align:center; font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; }
     .faq-list { max-width:760px; margin:0 auto; border-top:1px solid var(--line); }
     .faq-item { border-bottom:1px solid var(--line); }
-    .faq-item button { width:100%; padding:16px 0; border:0; background:none; color:var(--navy); display:flex; justify-content:space-between; text-align:left; font:700 16px Inter,sans-serif; cursor:pointer; }
+    .faq-item button { width:100%; padding:16px 0; border:0; background:none; color:var(--navy); display:flex; justify-content:space-between; gap:12px; text-align:left; font:700 16px Inter,sans-serif; cursor:pointer; }
     .faq-item p { margin:0 0 16px; color:#52606d; font-size:15px; line-height:1.55; }
 
     .comments { margin-top:28px; padding-bottom:30px; }
-    .comments h2 { color:var(--navy); font:700 clamp(1.35rem,4vw,2rem)/1.25 Domine,serif; margin:0 0 22px; text-align:center; }
     .comment-list { border:1px solid var(--line); border-radius:16px; padding:14px 14px 8px; }
     .comment { display:flex; gap:12px; align-items:flex-start; padding:12px 0; }
     .comment + .comment { border-top:1px solid #edf0f3; }
@@ -89,79 +128,39 @@
     .comment strong { display:block; color:#174ea6; font:700 14px Inter,sans-serif; }
     .comment p { margin:5px 0 0; font-size:15px; line-height:1.4; }
     .comment-meta { display:flex; gap:14px; padding:4px 10px 0; color:var(--muted); font-size:12px; }
-    .reactions { float:right; color:#566; font-size:12px; }
+    .reactions { margin-left:auto; color:#566; font-size:12px; }
 
     .final-offer { margin:18px auto 0; padding:0 18px 10px; text-align:center; }
-    .final-offer img { width:100%; max-width:900px; height:auto; display:block; margin:0 auto; border-radius:18px; box-shadow:0 16px 36px rgba(29,53,87,.16); }
+    .final-offer img { width:100%; max-width:900px; display:block; margin:0 auto; border-radius:18px; box-shadow:0 16px 36px rgba(29,53,87,.16); }
     .offer-details { max-width:650px; margin:24px auto 0; text-align:center; }
-    .offer-details .old-price { margin:0; color:var(--muted); font:700 16px Inter,sans-serif; text-decoration:line-through; }
-    .offer-details .price { margin:4px 0 2px; color:var(--navy); font:800 clamp(2.8rem,10vw,4.6rem)/1 Inter,sans-serif; }
-    .offer-details .price-note { margin:0 0 18px; color:var(--muted); font-size:14px; }
-    .cta-btn { display:block; width:100%; max-width:520px; margin:0 auto; padding:18px 22px; color:#fff; background:#16a34a; border-radius:12px; box-shadow:0 12px 28px rgba(22,163,74,.28); font:800 clamp(.95rem,3vw,1.1rem)/1.25 Inter,sans-serif; text-decoration:none; animation:pulse-cta 1.8s infinite; }
+    .old-price { margin:0; color:var(--muted); font:700 16px Inter,sans-serif; text-decoration:line-through; }
+    .price { margin:4px 0 2px; color:var(--navy); font:800 clamp(2.8rem,10vw,4.6rem)/1 Inter,sans-serif; }
+    .price-note { margin:0 0 18px; color:var(--muted); font-size:14px; }
+    .cta-btn { display:block; width:100%; max-width:520px; margin:0 auto; padding:18px 22px; color:#fff; background:var(--green); border-radius:12px; box-shadow:0 12px 28px rgba(22,163,74,.28); font:800 clamp(.95rem,3vw,1.1rem)/1.25 Inter,sans-serif; text-decoration:none; animation:pulse-cta 1.8s infinite; }
     .cta-btn:hover { background:#15803d; }
-    .cta-btn:focus-visible { outline:3px solid #16a34a; outline-offset:4px; }
-    @keyframes pulse-cta { 0%,100% { transform:scale(1); box-shadow:0 12px 28px rgba(22,163,74,.28); } 50% { transform:scale(1.025); box-shadow:0 16px 36px rgba(22,163,74,.45); } }
+    .cta-btn:focus-visible { outline:3px solid var(--green); outline-offset:4px; }
     .microcopy { margin:12px 0 0; color:var(--muted); font-size:13px; }
 
-    /* ===== Pop-up aos 7min30 de vídeo ===== */
-    .vsl-popup { position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(17,24,39,.55); animation:popup-fade .3s ease both; }
-    .vsl-popup[hidden] { display:none; }
-    .vsl-popup-card { position:relative; width:100%; max-width:420px; padding:32px 26px 26px; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(17,24,39,.35); text-align:center; animation:popup-pop .35s ease both; }
-    .vsl-popup-card p { margin:0 0 20px; color:var(--navy); font:700 clamp(1.1rem,4.5vw,1.3rem)/1.4 Inter,sans-serif; }
-    .vsl-popup-btn { display:inline-block; padding:12px 28px; border:0; border-radius:10px; background:#16a34a; color:#fff; font:800 15px Inter,sans-serif; cursor:pointer; }
-    .vsl-popup-btn:hover { background:#15803d; }
-    .vsl-popup-btn:focus-visible { outline:3px solid #16a34a; outline-offset:3px; }
-    @keyframes popup-fade { from { opacity:0; } to { opacity:1; } }
-    @keyframes popup-pop { from { opacity:0; transform:translateY(14px) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
-
-    /* ===== Selo e rodapé (sempre visíveis) ===== */
     .guarantee-seal { display:block; width:min(100%,260px); height:auto; margin:24px auto 0; }
-    .footer { padding:20px 0 24px; text-align:center; color:#555; font-size:13px; }
+    .footer { padding:20px 16px 84px; text-align:center; color:#555; font-size:13px; }
     .footer p { margin:6px 0; }
-
-    h2, h3, .deliverables-badge, .deliverable-tag { text-align:center; }
-    .deliverables-intro, .deliverable-card p, .comment p, .deliverables-callout, .offer-details .price-note, .microcopy { text-align:justify; text-justify:inter-word; hyphens:auto; -webkit-hyphens:auto; }
+    .disclaimer { max-width:640px; margin:0 auto 10px !important; color:#94a3b8; font-size:12px; line-height:1.5; }
 
     @media (max-width:650px) {
-      body { padding:12px; }
-      .video-slot { border-radius:10px; }
-      .play-button { width:72px; height:72px; border-width:3px; }
-      .play-button::before { margin-left:5px; border-top-width:13px; border-bottom-width:13px; border-left-width:20px; }
-      .social-proof-toast { top:auto; bottom:14px; right:auto; left:50%; margin-left:calc(min(280px,calc(100vw - 32px)) / -2); width:min(280px,calc(100vw - 32px)); }
-      @keyframes toast-in { 0%,12% { opacity:0; transform:translateY(12px); } 20%,72% { opacity:1; transform:translateY(0); } 82%,100% { opacity:0; transform:translateY(12px); } }
-      .deliverables { margin-top:12px; padding:20px 16px 14px; }
-      .deliverables-badge { font-size:11px; }
-      .deliverables h2 { font-size:1.4rem; }
       .deliverables-grid { grid-template-columns:1fr; gap:22px; }
-      .deliverables-intro { text-align:left; font-size:14.5px; line-height:1.55; margin-bottom:22px; }
       .deliverable-card { padding-bottom:18px; border-bottom:1px solid #edf0f3; }
-      .deliverable-card:last-child { border-bottom:0; padding-bottom:0; }
-      .deliverable-card h3 { font-size:16px; }
-      .deliverable-card p { font-size:14.5px; }
-      .deliverables-callout { font-size:14px; margin-top:22px; }
-      .bonus-mockup { grid-template-columns:1fr; padding-left:16px; padding-right:16px; gap:18px; }
-      .faq { padding-left:16px; padding-right:16px; }
-      .comments { margin-top:18px; padding-left:4px; padding-right:4px; }
-      .comments h2 { font-size:1.35rem; margin-bottom:16px; }
-      .comment-list { padding:6px 10px; border-radius:14px; }
-      .comment { gap:9px; }
+      .deliverable-card:last-child { border-bottom:0; }
+      .bonus-mockup { grid-template-columns:1fr; gap:18px; }
+      .comment-list { padding:6px 10px; }
       .comment p { font-size:14px; }
       .avatar { width:40px; height:40px; flex-basis:40px; }
-      .comment-meta { padding-left:4px; flex-wrap:wrap; }
-      .final-offer { padding:0 4px 8px; }
-      .final-offer img { border-radius:12px; }
-      .offer-details { margin-top:20px; padding:0 2px; }
-      .offer-details .old-price { font-size:15px; }
-      .offer-details .price-note { padding:0 6px; line-height:1.45; }
-      .cta-btn { max-width:100%; padding:16px 12px; font-size:14px; }
-      .microcopy { line-height:1.45; padding:0 6px; }
-      .footer { padding-bottom:84px; }
+      .comment-meta { flex-wrap:wrap; padding-left:4px; }
+      .cta-btn { padding:16px 12px; font-size:14px; }
     }
     @media (max-width:380px) {
-      .price { font-size:2.75rem !important; }
-      .comment-meta { gap:8px; font-size:11px; }
+      .price { font-size:2.75rem; }
       .reactions { display:none; }
-      .cta-btn { font-size:13px; }
+      .option { font-size:15px; padding:14px; }
     }
   </style>
 <!-- Meta Pixel Code -->
@@ -183,50 +182,35 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 </head>
 <body>
-  <h1><span>Glicemia abaixo de 140 o dia todo.</span><span>Uma refeição matinal de 5 minutos foi suficiente.</span></h1>
-
-  <div class="video-slot">
-    <video id="vsl-video" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
-      <source src="vsl.mp4" type="video/mp4">
-      Seu navegador não suporta vídeo.
-    </video>
-    <button class="play-button" id="play-button" type="button" aria-label="Reproduzir vídeo"></button>
-  </div>
-
-  <div class="volume-bar">
-    <button class="volume-btn" id="volume-btn" type="button" aria-label="Ativar ou silenciar o som">
-      <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
-      <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="m16 9 5 6M21 9l-5 6"/></svg>
-    </button>
-    <input class="volume-slider" id="volume-slider" type="range" min="0" max="100" value="100" aria-label="Volume">
-    <span class="volume-label" id="volume-label">100%</span>
-  </div>
-
-  <!-- Pop-up exibido aos 7min30 de vídeo -->
-  <div class="vsl-popup" id="vsl-popup" role="dialog" aria-modal="true" aria-labelledby="vsl-popup-texto" hidden>
-    <div class="vsl-popup-card">
-      <p id="vsl-popup-texto">Ainda está aí, temos 3 bônus exclusivos para você, aguarde e confira</p>
-      <button class="vsl-popup-btn" id="vsl-popup-close" type="button">Sim estou aqui</button>
+  <!-- Barra de progresso (some na abertura e no resultado) -->
+  <div class="quiz-top hide" id="quiz-top">
+    <div class="quiz-top-inner">
+      <button class="back-btn" id="back-btn" type="button" aria-label="Voltar para a pergunta anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="progress" role="progressbar" aria-label="Progresso do teste" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-label" id="progress-label">0%</span>
     </div>
   </div>
 
-  <!-- Todo o conteúdo abaixo só aparece depois de 15 minutos de vídeo assistido -->
-  <div id="after-video">
+  <!-- Cada etapa do quiz é desenhada aqui pelo script -->
+  <main class="quiz" id="quiz" aria-live="polite"></main>
+
+  <!-- Oferta: só aparece depois que o lead vê o resultado -->
+  <div id="offer" hidden>
     <div class="social-proof-toast" aria-live="polite">
       <span class="social-proof-dot" aria-hidden="true"></span>
       <div><strong id="buyer-name">Mariana S.</strong><span>Comprou</span></div>
     </div>
 
     <section class="deliverables wrap" aria-labelledby="encontrar-titulo">
-      <span class="deliverables-badge">CIÊNCIA NUTRICIONAL APLICADA</span>
+      <span class="deliverables-badge">SEU PLANO RECOMENDADO</span>
       <h2 id="encontrar-titulo">O que você vai encontrar</h2>
       <p class="deliverables-intro">Se você já cortou carboidratos, tentou jejum intermitente ou trocou de medicação sem ver o visor do medidor baixar, é normal ter um pé atrás. O motivo pelo qual tudo falhou antes é simples: você tentava controlar o almoço e o jantar na força de vontade enquanto o seu café da manhã travava o seu pâncreas logo às 7h30. Baseado no <strong>Efeito da Segunda Refeição</strong> (descoberto na Universidade de Toronto e replicado na Universidade de Lund), este método usa fibras específicas de fermentação lenta para ativar o <strong>propionato</strong> no intestino — um sinal químico natural que viaja até o fígado e &quot;abre&quot; o termostato da sua sensibilidade à insulina pelas próximas 24 horas.</p>
       <div class="deliverables-grid">
-        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg><span class="deliverable-tag">PROTOCOLO PRINCIPAL</span><h3>O Protocolo da 1ª Refeição (30 Combinações)</h3><p>O fichário completo com as 30 refeições matinais testadas que levam apenas 5 minutos para fazer, custam cerca de R$ 5 e ativam o gatilho do propionato antes das 8h00 da manhã para blindar seu almoço e jantar.</p></article>
-        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg><span class="deliverable-tag">GUIA PRÁTICO</span><h3>Mapa de Supermercado (A Lista de R$ 5)</h3><p>Um guia direto ao ponto, corredor por corredor, indicando exatamente quais marcas colocar no carrinho no Atacadão, Assaí, Carrefour ou mercado de bairro. Entre e saia em 15 minutos sem precisar decifrar rótulos.</p></article>
-        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v14H4zM7 9h10M7 13h7M7 17h4"/></svg><span class="deliverable-tag">BÔNUS #1 — HOJE GRÁTIS</span><h3>Manual de prevenção ao alzheimer</h3><p>O passo a passo de como evitar o alzheimer.</p></article>
-        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18M4 8h16M6 5h12M6 19h12"/></svg><span class="deliverable-tag">BÔNUS #2 — HOJE GRÁTIS</span><h3>25 receitas para desinchar</h3><p>Receitas maravilhosas e gostosas que te desincham sem o famoso &quot;Efeito sanfona&quot; e sem abrir mão do sabor.</p></article>
-        <article class="deliverable-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3c4 4 6 7 6 11a6 6 0 0 1-12 0c0-4 2-7 6-11Z"/></svg><span class="deliverable-tag">BÔNUS #3 — HOJE GRÁTIS</span><h3>Celulite nunca mais</h3><p>Esse é o guia passo a passo de como eliminar e suavizar as celulites.</p></article>
+        <article class="deliverable-card"><span class="deliverable-tag">PROTOCOLO PRINCIPAL</span><h3>O Protocolo da 1ª Refeição (30 Combinações)</h3><p>O fichário completo com as 30 refeições matinais testadas que levam apenas 5 minutos para fazer, custam cerca de R$ 5 e ativam o gatilho do propionato antes das 8h00 da manhã para blindar seu almoço e jantar.</p></article>
+        <article class="deliverable-card"><span class="deliverable-tag">GUIA PRÁTICO</span><h3>Mapa de Supermercado (A Lista de R$ 5)</h3><p>Um guia direto ao ponto, corredor por corredor, indicando exatamente quais marcas colocar no carrinho no Atacadão, Assaí, Carrefour ou mercado de bairro. Entre e saia em 15 minutos sem precisar decifrar rótulos.</p></article>
+        <article class="deliverable-card"><span class="deliverable-tag">BÔNUS #1 — HOJE GRÁTIS</span><h3>Manual de prevenção ao alzheimer</h3><p>O passo a passo de como evitar o alzheimer.</p></article>
+        <article class="deliverable-card"><span class="deliverable-tag">BÔNUS #2 — HOJE GRÁTIS</span><h3>25 receitas para desinchar</h3><p>Receitas maravilhosas e gostosas que te desincham sem o famoso &quot;Efeito sanfona&quot; e sem abrir mão do sabor.</p></article>
+        <article class="deliverable-card"><span class="deliverable-tag">BÔNUS #3 — HOJE GRÁTIS</span><h3>Celulite nunca mais</h3><p>Esse é o guia passo a passo de como eliminar e suavizar as celulites.</p></article>
       </div>
       <p class="deliverables-callout"><strong>Zero pílulas milagrosas, zero jejuns extremos e zero ingredientes caros.</strong> É comida de verdade, organizada na ordem bioquímica certa para o seu pâncreas voltar a trabalhar a seu favor.</p>
     </section>
@@ -234,6 +218,26 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     <section class="bonus-mockup wrap" aria-labelledby="bonus-mockup-titulo">
       <div><span class="deliverables-badge">TODOS OS BÔNUS INCLUSOS</span><h2 id="bonus-mockup-titulo">Você recebe muito mais do que um guia</h2><p>Veja os materiais extras que acompanham o protocolo e tornam sua experiência ainda mais completa.</p></div>
       <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/mocap%20imagem%20dos%20bonus.jfif-W7mFYhJP3x4l6lUi0OJ8YfKtL6kGJN.jpeg" alt="Mockup dos três e-books bônus: receitas para desinchar, prevenção do Alzheimer e celulite nunca mais" loading="lazy">
+    </section>
+
+    <section class="final-offer" id="oferta" aria-label="Oferta">
+      <img src="images/mocap-vendas.jpg" alt="Livro Glicemia em Jejum sob Controle exibido em notebook, celular e tablet" loading="lazy">
+      <div class="offer-details"><p class="old-price">De R$ 97,00 por apenas:</p><p class="price">R$ 37,90</p><p class="price-note">Pagamento único • Acesso vitalício imediato e todos os bônus inclusos</p><a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn js-checkout">QUERO ACESSAR O PROTOCOLO POR R$ 37,90</a><p class="microcopy">🔒 Compra 100% Segura • Liberação imediata no celular via Pix ou Cartão</p></div>
+    </section>
+
+    <section class="comments wrap" aria-labelledby="comentarios-titulo">
+      <h2 id="comentarios-titulo">O que as pessoas estão dizendo</h2>
+      <div class="comment-list">
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-1.webp" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Sophie Robinson</strong><p>Adorei como o método é simples de entender e colocar em prática. Minha manhã ficou muito mais organizada!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>2h</span><span class="reactions">👍 ❤️ 21</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-3.png" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Victoria Carter</strong><p>Finalmente encontrei uma orientação clara e sem complicação. Já faz parte da minha rotina e estou muito satisfeita.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 18</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-2.webp" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Lisa G.</strong><p>O passo a passo faz muito sentido e é super fácil de acompanhar. Recomendo para quem quer começar com mais confiança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 46</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-4.webp" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Madison Scott</strong><p>Em poucas semanas já percebi uma diferença positiva na minha disciplina. O conteúdo é direto, prático e motivador.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>55 min</span><span class="reactions">👍 ❤️ 63</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-5.webp" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Charlotte Williams</strong><p>Eu precisava de algo que coubesse na minha rotina. A proposta é objetiva e me ajudou a manter o foco todos os dias.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>40 min</span><span class="reactions">👍 ❤️ 58</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-6.png" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Daisy Collins</strong><p>O material superou minhas expectativas. A explicação é acolhedora, fácil de aplicar e me trouxe muito mais segurança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>32 min</span><span class="reactions">👍 ❤️ 14</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-7.png" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emily Lewis</strong><p>Estou seguindo o método há uma semana e já sinto minha rotina mais leve. Vale muito a pena conhecer o conteúdo completo!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>28 min</span><span class="reactions">👍 ❤️ 35</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-8.webp" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Olivia Martinez</strong><p>O melhor é que não parece complicado. As orientações são realistas e me ajudaram a tomar decisões melhores no dia a dia.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>20 min</span><span class="reactions">👍 ❤️ 49</span></div></div></article>
+        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-9.webp" alt="" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emma Clark</strong><p>Conteúdo excelente e muito bem explicado. Estou surpresa com o quanto uma mudança simples pode melhorar minha constância.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>agora</span><span class="reactions">👍 ❤️ 72</span></div></div></article>
+      </div>
     </section>
 
     <section class="faq wrap" aria-labelledby="faq-titulo">
@@ -247,36 +251,219 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
       </div>
     </section>
 
-    <section class="comments wrap" id="comentarios" aria-labelledby="comentarios-titulo">
-      <h2 id="comentarios-titulo">O que as pessoas estão dizendo</h2>
-      <div class="comment-list">
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-1.webp" alt="Foto de Sophie Robinson" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Sophie Robinson</strong><p>Adorei como o método é simples de entender e colocar em prática. Minha manhã ficou muito mais organizada!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>2h</span><span class="reactions">👍 ❤️ 21</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-3.png" alt="Foto de Victoria Carter" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Victoria Carter</strong><p>Finalmente encontrei uma orientação clara e sem complicação. Já faz parte da minha rotina e estou muito satisfeita.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 18</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-2.webp" alt="Foto de Lisa G." loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Lisa G.</strong><p>O passo a passo faz muito sentido e é super fácil de acompanhar. Recomendo para quem quer começar com mais confiança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>1h</span><span class="reactions">👍 ❤️ 46</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-4.webp" alt="Foto de Madison Scott" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Madison Scott</strong><p>Em poucas semanas já percebi uma diferença positiva na minha disciplina. O conteúdo é direto, prático e motivador.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>55 min</span><span class="reactions">👍 ❤️ 63</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-5.webp" alt="Foto de Charlotte Williams" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Charlotte Williams</strong><p>Eu precisava de algo que coubesse na minha rotina. A proposta é objetiva e me ajudou a manter o foco todos os dias.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>40 min</span><span class="reactions">👍 ❤️ 58</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-6.png" alt="Foto de Daisy Collins" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Daisy Collins</strong><p>O material superou minhas expectativas. A explicação é acolhedora, fácil de aplicar e me trouxe muito mais segurança.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>32 min</span><span class="reactions">👍 ❤️ 14</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-7.png" alt="Foto de Emily Lewis" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emily Lewis</strong><p>Estou seguindo o método há uma semana e já sinto minha rotina mais leve. Vale muito a pena conhecer o conteúdo completo!</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>28 min</span><span class="reactions">👍 ❤️ 35</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-8.webp" alt="Foto de Olivia Martinez" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Olivia Martinez</strong><p>O melhor é que não parece complicado. As orientações são realistas e me ajudaram a tomar decisões melhores no dia a dia.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>20 min</span><span class="reactions">👍 ❤️ 49</span></div></div></article>
-        <article class="comment"><div class="avatar" aria-hidden="true"><img src="images/rosto-9.webp" alt="Foto de Emma Clark" loading="lazy"></div><div class="comment-content"><div class="bubble"><strong>Emma Clark</strong><p>Conteúdo excelente e muito bem explicado. Estou surpresa com o quanto uma mudança simples pode melhorar minha constância.</p></div><div class="comment-meta"><span>Curtir</span><span>Responder</span><span>agora</span><span class="reactions">👍 ❤️ 72</span></div></div></article>
-      </div>
+    <section class="final-offer" aria-label="Oferta final">
+      <div class="offer-details"><p class="old-price">De R$ 97,00 por apenas:</p><p class="price">R$ 37,90</p><p class="price-note">Pagamento único • Acesso vitalício imediato e todos os bônus inclusos</p><a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn js-checkout">QUERO ACESSAR O PROTOCOLO POR R$ 37,90</a><p class="microcopy">🔒 Compra 100% Segura • Liberação imediata no celular via Pix ou Cartão</p></div>
     </section>
 
-    <section class="final-offer" aria-label="Apresentação do produto">
-      <img src="images/mocap-vendas.jpg" alt="Livro Glicemia em Jejum sob Controle exibido em notebook, celular e tablet" loading="lazy">
-      <div class="offer-details"><p class="old-price">De R$ 97,00 por apenas:</p><p class="price">R$ 37,90</p><p class="price-note">Pagamento único • Acesso vitalício imediato e todos os bônus inclusos</p><a href="https://pay.cakto.com.br/xvx5eks_1312706" class="cta-btn">QUERO ACESSAR O PROTOCOLO POR R$ 37,90</a><p class="microcopy">🔒 Compra 100% Segura • Liberação imediata no celular via Pix ou Cartão</p></div>
-    </section>
+    <img class="guarantee-seal" src="images/selo-garantia.jpg" alt="Selo de garantia de 7 dias com devolução de 100% do dinheiro" loading="lazy">
   </div>
 
-  <img class="guarantee-seal" src="images/selo-garantia.jpg" alt="Selo de garantia de 7 dias com devolução de 100% do dinheiro">
-
-  <footer class="footer"><p>Suas informações estão 100% seguras e nunca serão compartilhadas com ninguém.</p><p>© 2025 | <a href="#">Informações legais</a></p></footer>
+  <footer class="footer">
+    <p class="disclaimer">Este teste é educativo e não é um diagnóstico. O conteúdo não substitui consulta, exames ou tratamento médico. Não altere sua medicação sem orientação do seu médico.</p>
+    <p>Suas respostas não são armazenadas nem compartilhadas.</p>
+    <p>© 2025 | <a href="#">Informações legais</a></p>
+  </footer>
 
   <script>
-    const video = document.getElementById('vsl-video');
-    const playButton = document.getElementById('play-button');
-    let started = false;
+    // ===================== Conteúdo do quiz =====================
+    // type: 'q' = pergunta (avança sozinha ao tocar), 'info' = tela educativa com botão.
+    const STEPS = [
+      { type:'q', key:'sexo', layout:'two', title:'Para começar, você é:', options:[['👩','Mulher'],['👨','Homem']] },
+      { type:'q', key:'idade', title:'Qual é a sua idade?', options:[['🌱','18 a 34 anos'],['🌿','35 a 44 anos'],['🌳','45 a 54 anos'],['🍂','55 a 64 anos'],['🌻','65 anos ou mais']] },
+      { type:'q', key:'glicemia', title:'Como tem estado a sua glicemia em jejum?', sub:'Pense nas últimas medições que você fez.', options:[['🟢','Abaixo de 100 mg/dL'],['🟡','Entre 100 e 125 mg/dL'],['🟠','Entre 126 e 180 mg/dL'],['🔴','Acima de 180 mg/dL'],['❔','Não sei / não costumo medir']] },
+      { type:'q', key:'sono', title:'Você sente sono ou cansaço depois de comer?', options:[['😴','Quase sempre'],['😐','Às vezes'],['🙂','Raramente']] },
+      { type:'q', key:'doce', title:'Ao longo do dia, bate aquela vontade forte de comer doce?', options:[['🍫','Sim, todos os dias'],['🍪','Às vezes'],['🥗','Quase nunca']] },
+      { type:'q', key:'cafe', title:'O que você costuma comer no café da manhã?', options:[['🥖','Pão, tapioca ou bolacha com café'],['🍌','Frutas, suco ou vitamina'],['☕','Só café ou pulo o café da manhã'],['🍳','Ovos ou outra proteína']] },
+      { type:'info', eyebrow:'Você sabia?', title:'A sua 1ª refeição influencia a glicemia do dia inteiro', body:[
+          'Pesquisadores da <strong>Universidade de Toronto</strong> observaram um fenômeno chamado <strong>Efeito da Segunda Refeição</strong>: o que você come pela manhã muda a forma como o corpo responde ao almoço e até ao jantar.',
+          'Ou seja: muitas vezes o problema não está no almoço ou no jantar, e sim no que acontece <strong>antes das 8h da manhã</strong>.'
+        ], cta:'Continuar' },
+      { type:'q', key:'tentou', title:'O que você já tentou para controlar a glicemia?', options:[['🚫','Cortar açúcar e carboidratos'],['⏱️','Jejum intermitente'],['🍵','Chás, cápsulas ou suplementos'],['🤷','Ainda não tentei nada']] },
+      { type:'q', key:'tempo', title:'Há quanto tempo isso te preocupa?', options:[['📅','Menos de 6 meses'],['🗓️','De 6 meses a 2 anos'],['⏳','Mais de 2 anos']] },
+      { type:'q', key:'manha', title:'Quanto tempo você tem de manhã para preparar a primeira refeição?', options:[['⚡','Menos de 5 minutos'],['⏰','De 5 a 15 minutos'],['🧑‍🍳','Mais de 15 minutos']] },
+      { type:'q', key:'objetivo', title:'O que você mais quer conquistar agora?', options:[['📉','Ver números menores no medidor'],['🔋','Ter mais energia durante o dia'],['🍽️','Comer sem medo e sem culpa'],['🧘','Ficar tranquilo(a) em relação ao futuro']] }
+    ];
 
+    const quiz = document.getElementById('quiz');
+    const quizTop = document.getElementById('quiz-top');
+    const backBtn = document.getElementById('back-btn');
+    const progress = document.getElementById('progress');
+    const progressFill = document.getElementById('progress-fill');
+    const progressLabel = document.getElementById('progress-label');
+    const offer = document.getElementById('offer');
+    const answers = {};
+    let current = -1; // -1 = tela de abertura
+
+    function track(event) { try { if (window.fbq) fbq('track', event); } catch (e) {} }
+    function scrollTop() { window.scrollTo({ top:0, behavior:'smooth' }); }
+
+    function setProgress() {
+      const pct = Math.round((current / STEPS.length) * 100);
+      progressFill.style.width = pct + '%';
+      progressLabel.textContent = pct + '%';
+      progress.setAttribute('aria-valuenow', String(pct));
+      backBtn.hidden = current <= 0;
+    }
+
+    // ----- Abertura -----
+    function renderIntro() {
+      current = -1;
+      quizTop.classList.add('hide');
+      quiz.innerHTML = `
+        <div class="step">
+          <span class="eyebrow" style="margin-top:18px">Teste gratuito • 1 minuto</span>
+          <h1>Descubra o que pode estar travando a sua glicemia logo pela manhã</h1>
+          <p class="sub">Responda 10 perguntas rápidas e veja como o seu café da manhã pode estar influenciando a glicemia do seu dia inteiro.</p>
+          <img class="intro-img" src="images/mocap-vendas.jpg" alt="Material Glicemia em Jejum sob Controle em notebook, celular e tablet">
+          <ul class="intro-points">
+            <li>Leva menos de 1 minuto</li>
+            <li>Resultado na hora, de acordo com suas respostas</li>
+            <li>100% gratuito</li>
+          </ul>
+          <button class="primary-btn" type="button" id="start-btn">COMEÇAR O TESTE</button>
+          <p class="note">Este teste é educativo e não substitui orientação médica.</p>
+        </div>`;
+      document.getElementById('start-btn').addEventListener('click', () => { goTo(0); });
+    }
+
+    // ----- Pergunta ou tela educativa -----
+    function renderStep() {
+      const step = STEPS[current];
+      quizTop.classList.remove('hide');
+      setProgress();
+      if (step.type === 'info') {
+        quiz.innerHTML = `
+          <div class="step">
+            <span class="eyebrow">${step.eyebrow}</span>
+            <h2>${step.title}</h2>
+            <div class="info-card">
+              <svg class="info-chart" viewBox="0 0 320 120" role="img" aria-label="Ilustração: com a primeira refeição certa, os picos do almoço e do jantar ficam menores">
+                <line x1="10" y1="105" x2="310" y2="105" stroke="#e2e8f0" stroke-width="2"/>
+                <path d="M10 95 C40 95 50 30 75 30 S105 90 125 92 C150 92 165 20 190 20 S220 88 240 90 C260 90 275 35 290 35 S305 80 310 85" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6"/>
+                <path d="M10 95 C40 95 50 62 75 62 S105 92 125 93 C150 93 165 58 190 58 S220 91 240 92 C260 92 275 64 290 64 S305 86 310 88" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-linecap="round"/>
+                <text x="75" y="118" font-family="Inter,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Café</text>
+                <text x="190" y="118" font-family="Inter,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Almoço</text>
+                <text x="290" y="118" font-family="Inter,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Jantar</text>
+              </svg>
+              ${step.body.map(p => `<p>${p}</p>`).join('')}
+            </div>
+            <button class="primary-btn" type="button" id="info-btn">${step.cta}</button>
+          </div>`;
+        document.getElementById('info-btn').addEventListener('click', () => goTo(current + 1));
+        return;
+      }
+      const two = step.layout === 'two' ? ' two' : '';
+      quiz.innerHTML = `
+        <div class="step">
+          <h2>${step.title}</h2>
+          ${step.sub ? `<p class="sub">${step.sub}</p>` : '<div style="height:12px"></div>'}
+          <div class="options${two}" role="list">
+            ${step.options.map((o, i) => `<button class="option${answers[step.key] === i ? ' selected' : ''}" type="button" role="listitem" data-i="${i}"><span class="emoji" aria-hidden="true">${o[0]}</span><span>${o[1]}</span></button>`).join('')}
+          </div>
+        </div>`;
+      quiz.querySelectorAll('.option').forEach(btn => btn.addEventListener('click', () => {
+        quiz.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        answers[step.key] = Number(btn.dataset.i);
+        quiz.querySelectorAll('.option').forEach(b => b.disabled = true);
+        setTimeout(() => goTo(current + 1), 280);
+      }));
+    }
+
+    function goTo(index) {
+      current = index;
+      if (current >= STEPS.length) { renderLoading(); return; }
+      renderStep();
+      scrollTop();
+    }
+    backBtn.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+
+    // ----- Tela "Analisando suas respostas" -----
+    function renderLoading() {
+      quizTop.classList.add('hide');
+      scrollTop();
+      quiz.innerHTML = `
+        <div class="step loading">
+          <div class="ring">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="10"/><circle id="ring-arc" cx="60" cy="60" r="52" fill="none" stroke="#16a34a" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg>
+            <div class="ring-value" id="ring-value">0%</div>
+          </div>
+          <h2>Analisando suas respostas…</h2>
+          <ul class="checklist">
+            <li>Avaliando seus hábitos pela manhã</li>
+            <li>Cruzando com o Efeito da Segunda Refeição</li>
+            <li>Identificando o seu perfil</li>
+            <li>Montando a sua recomendação</li>
+          </ul>
+        </div>`;
+      const arc = document.getElementById('ring-arc');
+      const value = document.getElementById('ring-value');
+      const items = quiz.querySelectorAll('.checklist li');
+      const duration = 4200;
+      const t0 = performance.now();
+      function frame(now) {
+        const p = Math.min(1, (now - t0) / duration);
+        value.textContent = Math.round(p * 100) + '%';
+        arc.setAttribute('stroke-dashoffset', String(326.7 * (1 - p)));
+        items.forEach((li, i) => { if (p >= (i + 1) / items.length - 0.02) li.classList.add('done'); });
+        if (p < 1) requestAnimationFrame(frame); else setTimeout(renderResult, 400);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // ----- Resultado personalizado + oferta -----
+    function renderResult() {
+      const cafe = answers.cafe;
+      const PROFILES = [
+        { name:'Pico da Manhã', text:'Pão, tapioca e bolacha logo cedo são absorvidos muito rápido. Isso costuma provocar um pico de glicose pela manhã que deixa o corpo mais "sensível" no almoço e no jantar.' },
+        { name:'Pico da Manhã (açúcar das frutas)', text:'Frutas, sucos e vitaminas parecem saudáveis, mas sozinhos, logo cedo, são absorvidos rápido. Sem as fibras certas junto, o corpo começa o dia em desvantagem para o almoço e o jantar.' },
+        { name:'Manhã Descoberta', text:'Pular a primeira refeição (ou tomar só café) deixa o corpo sem o "sinal" que prepara o metabolismo para as próximas refeições. É comum a glicemia subir mais no almoço por causa disso.' },
+        { name:'Falta do Gatilho das Fibras', text:'Ovos e proteína são um bom começo, mas faltam as fibras de fermentação lenta que ativam o Efeito da Segunda Refeição. É exatamente essa peça que ajuda a suavizar o almoço e o jantar.' }
+      ];
+      const profile = PROFILES[cafe] || PROFILES[0];
+
+      // Posição no medidor (0 = favorável, 100 = precisa de atenção), somando os sinais das respostas.
+      let score = 30;
+      score += [0, 10, 20, 25, 8][answers.glicemia] || 0;
+      score += [15, 7, 0][answers.sono] || 0;
+      score += [15, 7, 0][answers.doce] || 0;
+      score += [10, 8, 12, 4][cafe] || 0;
+      score = Math.max(20, Math.min(92, score));
+
+      const tentou = ['cortar açúcar e carboidratos', 'o jejum intermitente', 'chás, cápsulas e suplementos', null][answers.tentou];
+      const manha = ['menos de 5 minutos', 'de 5 a 15 minutos', 'mais de 15 minutos'][answers.manha];
+      const objetivo = ['ver números menores no medidor', 'ter mais energia durante o dia', 'comer sem medo e sem culpa', 'ficar tranquilo(a) em relação ao futuro'][answers.objetivo];
+      const highReading = answers.glicemia === 2 || answers.glicemia === 3;
+
+      quiz.innerHTML = `
+        <div class="step">
+          <div class="result-card">
+            <div class="center"><span class="result-badge">SEU RESULTADO</span></div>
+            <h2>Seu perfil: ${profile.name}</h2>
+            <div class="meter" aria-label="Indicador de atenção dos seus hábitos matinais">
+              <div class="meter-bar"><div class="meter-pin" id="meter-pin"></div></div>
+              <div class="meter-labels"><span>Favorável</span><span>Atenção</span><span>Muita atenção</span></div>
+            </div>
+            <p>${profile.text}</p>
+            <ul class="summary">
+              ${tentou ? `<li><span>⚠️</span>Você já tentou ${tentou}. Isso costuma falhar quando a 1ª refeição continua igual.</li>` : '<li><span>✅</span>Você ainda não tentou nada, então pode começar já do jeito certo.</li>'}
+              <li><span>⏱️</span>Você tem ${manha} de manhã. As combinações do protocolo ficam prontas em cerca de 5 minutos.</li>
+              <li><span>🎯</span>Seu objetivo é ${objetivo}. O plano abaixo foi pensado para isso.</li>
+            </ul>
+            ${highReading ? '<p class="medical-note">Valores de glicemia em jejum acima de 126 mg/dL precisam de acompanhamento médico. O protocolo é um complemento para a sua rotina alimentar e não substitui o seu tratamento nem a sua medicação.</p>' : ''}
+            <a class="primary-btn" href="#oferta" id="see-plan">VER MEU PLANO RECOMENDADO</a>
+          </div>
+        </div>`;
+      requestAnimationFrame(() => setTimeout(() => { document.getElementById('meter-pin').style.left = score + '%'; }, 120));
+      document.getElementById('see-plan').addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('oferta').scrollIntoView({ behavior:'smooth', block:'start' });
+      });
+      offer.hidden = false;
+      track('Lead'); // só o evento; nenhuma resposta do quiz é enviada para a Meta
+    }
+
+    // ----- Oferta: FAQ, prova social e clique no checkout -----
     function toggleFaq(button) {
       const answer = button.nextElementSibling;
       const isOpen = !answer.hidden;
@@ -284,86 +471,14 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
       button.setAttribute('aria-expanded', String(!isOpen));
       button.querySelector('span').textContent = isOpen ? '+' : '−';
     }
+    document.querySelectorAll('.js-checkout').forEach(a => a.addEventListener('click', () => track('InitiateCheckout')));
 
-    // ----- Pop-up "Ainda está aí": aos 7min30 (450 s) de vídeo, ou quando o lead abaixa o volume. Não pausa o vídeo -----
-    const POPUP_AT_SECONDS = 7 * 60 + 30;
-    const popup = document.getElementById('vsl-popup');
-    let popupShownByTime = false;
-    function showPopup() { popup.hidden = false; }
-    video.addEventListener('timeupdate', () => {
-      if (!popupShownByTime && video.currentTime >= POPUP_AT_SECONDS) {
-        popupShownByTime = true;
-        showPopup();
-      }
-    });
-    document.getElementById('vsl-popup-close').addEventListener('click', () => { popup.hidden = true; });
-
-    // ----- Prova social (só roda depois de liberada) -----
     const buyerName = document.getElementById('buyer-name');
     const buyers = ['Mariana S.', 'Patrícia R.', 'Juliana M.', 'Carla A.'];
     let buyerIndex = 0;
-    setInterval(() => {
-      buyerIndex = (buyerIndex + 1) % buyers.length;
-      buyerName.textContent = buyers[buyerIndex];
-    }, 5000);
+    setInterval(() => { buyerIndex = (buyerIndex + 1) % buyers.length; buyerName.textContent = buyers[buyerIndex]; }, 5000);
 
-    // ----- Play inicial (os navegadores exigem um clique) -----
-    playButton.addEventListener('click', () => {
-      started = true;
-      playButton.style.display = 'none';
-      video.play();
-    });
-
-    // Depois de iniciado, não deixa pausar: se pausar por qualquer motivo, retoma.
-    video.addEventListener('pause', () => {
-      if (started && !video.ended) video.play().catch(() => {});
-    });
-
-    // ----- Controle de volume (botão de mudo + barra deslizante) -----
-    const volumeBtn = document.getElementById('volume-btn');
-    const volumeSlider = document.getElementById('volume-slider');
-    const volumeLabel = document.getElementById('volume-label');
-    let lastVolume = 100;
-
-    function renderVolume() {
-      const level = video.muted ? 0 : Math.round(video.volume * 100);
-      volumeSlider.value = level;
-      volumeLabel.textContent = level + '%';
-      volumeBtn.classList.toggle('muted', level === 0);
-    }
-    volumeSlider.addEventListener('input', () => {
-      const level = Number(volumeSlider.value);
-      const previousLevel = video.muted ? 0 : Math.round(video.volume * 100);
-      video.muted = level === 0;
-      video.volume = level / 100;
-      if (level > 0) lastVolume = level;
-      renderVolume();
-      if (level < previousLevel) showPopup(); // lead abaixou o volume
-    });
-    volumeBtn.addEventListener('click', () => {
-      if (video.muted || video.volume === 0) {
-        video.muted = false;
-        video.volume = (lastVolume || 100) / 100;
-        renderVolume();
-      } else {
-        lastVolume = Math.round(video.volume * 100);
-        video.muted = true;
-        renderVolume();
-        showPopup(); // lead silenciou o vídeo
-      }
-    });
-    video.addEventListener('volumechange', renderVolume);
-
-    // Bloqueia menu de clique direito e atalhos de teclado (espaço, K) no vídeo.
-    video.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-      if (e.code === 'Space' || e.key === 'k' || e.key === 'K' || e.key === 'MediaPlayPause') e.preventDefault();
-    });
-
-    // Ao voltar para a aba, garante que o vídeo continue tocando.
-    document.addEventListener('visibilitychange', () => {
-      if (started && !document.hidden && !video.ended && video.paused) video.play().catch(() => {});
-    });
+    renderIntro();
   </script>
 </body>
 </html>
