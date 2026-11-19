@@ -107,7 +107,7 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     </button>
   </div>
 
-  <!-- Botão e selo só aparecem depois de 15 minutos de vídeo assistido -->
+  <!-- Botão e selo só aparecem depois de 5 minutos de vídeo assistido -->
   <section class="offer" id="oferta" aria-label="Oferta" hidden>
     <a href="oferta/" class="cta-btn" id="cta-oferta">GARANTA AGORA MESMO</a>
     <img class="guarantee-seal" src="images/selo-garantia.jpg" alt="Selo de garantia de 7 dias com devolução de 100% do dinheiro">
@@ -174,8 +174,8 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     const ofertaHref = location.protocol === 'file:' ? 'oferta/index.html' : 'oferta/';
     ctaOferta.href = ofertaHref + location.search;
 
-    // ----- Libera o botão (e o selo) aos 15 minutos de vídeo -----
-    const REVEAL_AT_SECONDS = 15 * 60;
+    // ----- Libera o botão (e o selo) aos 5 minutos de vídeo -----
+    const REVEAL_AT_SECONDS = 5 * 60;
     const offerBlock = document.getElementById('oferta');
     let revealed = false;
     function revealOffer(animate) {
@@ -185,7 +185,7 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
       if (animate) offerBlock.classList.add('reveal');
       try { localStorage.setItem('vsl_oferta_liberada', '1'); } catch (e) {}
     }
-    // Quem já chegou aos 15 min antes (e voltou à página) vê o botão direto.
+    // Quem já chegou aos 5 min antes (e voltou à página) vê o botão direto.
     try { if (localStorage.getItem('vsl_oferta_liberada') === '1') revealOffer(false); } catch (e) {}
     video.addEventListener('timeupdate', () => {
       if (!revealed && soundOn && video.currentTime >= REVEAL_AT_SECONDS) revealOffer(true);
