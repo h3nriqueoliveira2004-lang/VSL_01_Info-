@@ -34,6 +34,9 @@
 
     /* ===== Oferta ===== */
     .offer { width:100%; max-width:520px; margin:26px auto 0; text-align:center; }
+    .offer[hidden] { display:none; }
+    .offer.reveal { animation:reveal-in .8s ease both; }
+    @keyframes reveal-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
     .cta-btn { display:block; width:100%; padding:20px 16px; text-align:center; letter-spacing:.02em; border-radius:12px; background:var(--green); color:#fff; text-decoration:none; font:900 clamp(1rem,4vw,1.15rem)/1.25 Inter,sans-serif; box-shadow:0 12px 28px rgba(22,163,74,.3); animation:pulse-cta 1.8s infinite; }
     .cta-btn:hover { background:#15803d; }
     .cta-btn:focus-visible { outline:3px solid var(--green); outline-offset:4px; }
@@ -104,7 +107,8 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     </button>
   </div>
 
-  <section class="offer" id="oferta" aria-label="Oferta">
+  <!-- Botão e selo só aparecem depois de 15 minutos de vídeo assistido -->
+  <section class="offer" id="oferta" aria-label="Oferta" hidden>
     <a href="oferta/" class="cta-btn" id="cta-oferta">GARANTA AGORA MESMO</a>
     <img class="guarantee-seal" src="images/selo-garantia.jpg" alt="Selo de garantia de 7 dias com devolução de 100% do dinheiro">
   </section>
@@ -169,6 +173,23 @@ src="https://www.facebook.com/tr?id=28568663332812896&ev=PageView&noscript=1"
     const ctaOferta = document.getElementById('cta-oferta');
     const ofertaHref = location.protocol === 'file:' ? 'oferta/index.html' : 'oferta/';
     ctaOferta.href = ofertaHref + location.search;
+
+    // ----- Libera o botão (e o selo) aos 15 minutos de vídeo -----
+    const REVEAL_AT_SECONDS = 15 * 60;
+    const offerBlock = document.getElementById('oferta');
+    let revealed = false;
+    function revealOffer(animate) {
+      if (revealed) return;
+      revealed = true;
+      offerBlock.hidden = false;
+      if (animate) offerBlock.classList.add('reveal');
+      try { localStorage.setItem('vsl_oferta_liberada', '1'); } catch (e) {}
+    }
+    // Quem já chegou aos 15 min antes (e voltou à página) vê o botão direto.
+    try { if (localStorage.getItem('vsl_oferta_liberada') === '1') revealOffer(false); } catch (e) {}
+    video.addEventListener('timeupdate', () => {
+      if (!revealed && soundOn && video.currentTime >= REVEAL_AT_SECONDS) revealOffer(true);
+    });
 
     // ----- Pop-up de saída: mouse sai pelo topo da janela (computador), uma vez só -----
     const exitModal = document.getElementById('exit-modal');
